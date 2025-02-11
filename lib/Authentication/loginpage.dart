@@ -1,11 +1,11 @@
 import 'dart:ui';
 import 'package:airbound/common%20widgets/commonbutton.dart';
 import 'package:airbound/common%20widgets/commontextfield.dart';
-import 'package:airbound/home.dart';
+import 'package:airbound/Home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'controller/auth_controller.dart';
+import '../controller/auth_controller.dart';
 
 class loginpage extends StatefulWidget {
   const loginpage({super.key});

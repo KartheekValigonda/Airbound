@@ -1,7 +1,7 @@
 import 'package:airbound/common%20widgets/commonbutton.dart';
-import 'package:airbound/info.dart';
-import 'package:airbound/loginpage.dart';
-import 'package:airbound/signup1.dart';
+import 'package:airbound/Authentication/info.dart';
+import 'package:airbound/Authentication/loginpage.dart';
+import 'package:airbound/Authentication/signup1.dart';
 import 'package:flutter/material.dart';
 
 class openingpg extends StatefulWidget {

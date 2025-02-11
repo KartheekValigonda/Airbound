@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:airbound/common%20widgets/commonbutton.dart';
-import 'package:airbound/signup2.dart';
+import 'package:airbound/Authentication/signup2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
