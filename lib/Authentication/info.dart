@@ -1,4 +1,4 @@
-import 'package:airbound/signup1.dart';
+import 'package:airbound/Authentication/signup1.dart';
 import 'package:flutter/material.dart';
 
 class Info extends StatefulWidget {
