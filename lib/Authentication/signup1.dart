@@ -85,7 +85,7 @@ class _signup1State extends State<Signup1> {
                   children: [
                     commonButton(
                       onNavigate: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const Signup2()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>  Signup2()));
                       },
                       buttonName:"Continue",
                       width:horizontalPadding*0.75,

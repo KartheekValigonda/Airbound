@@ -4,7 +4,6 @@ import 'package:airbound/common%20widgets/commontextfield.dart';
 import 'package:airbound/Home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../controller/auth_controller.dart';
 
 class loginpage extends StatefulWidget {
@@ -15,12 +14,18 @@ class loginpage extends StatefulWidget {
 }
 
 class _loginpageState extends State<loginpage> {
-  var controller = Get.put(AuthController());
+  final AuthController controller = Get.put(AuthController());
 
   bool isChecked = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
+  @override
+  void dispose() {
+    emailController.dispose();
+    passController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = MediaQuery.of(context).size.width ;
@@ -65,8 +70,15 @@ class _loginpageState extends State<loginpage> {
               ),
               SizedBox(height:verticalPadding*0.03),
               commonButton(
-                onNavigate: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const Home()));
+                onNavigate: () async {
+                  var userCredential = await controller.loginMethod(context: context);
+
+                  if (userCredential != null) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Home()),
+                    );
+                  }
                 },
                 buttonName: "login",
                 width: horizontalPadding*0.85,

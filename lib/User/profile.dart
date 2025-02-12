@@ -8,6 +8,8 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -61,7 +63,16 @@ class _ProfileState extends State<Profile> {
                     _buildSettingsOption(
                         Icons.help_outline, "Help and support", context),
                     const Divider(),
-                    _buildLogoutOption(context),
+                ListTile(
+                  leading: const Icon(Icons.logout, color: Colors.red),
+                  title: const Text(
+                    "Log out",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  onTap: () {
+
+                  },
+                )
                   ],
                 ),
               ),
@@ -82,15 +93,5 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  // Widget for Logout Option
-  Widget _buildLogoutOption(BuildContext context) {
-    return ListTile(
-      leading: const Icon(Icons.logout, color: Colors.red),
-      title: const Text(
-        "Log out",
-        style: TextStyle(color: Colors.red),
-      ),
-      onTap: () {},
-    );
-  }
+
 }
