@@ -59,10 +59,9 @@ class HomeScreen extends StatelessWidget {
           "Airbound",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.teal, // Set background color to black
+        backgroundColor: Color(0xFF006A67), // Set background color to black
         iconTheme: const IconThemeData(color: Colors.white), // Change back button and icons to white
         centerTitle: true, // Center the title text
-        elevation: 0, // Remove shadow
       ),
       backgroundColor: Colors.grey[300],
       body: Padding(

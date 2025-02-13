@@ -1,10 +1,12 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'dart:math' as math;
+import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:airbound/common%20widgets/commonbutton.dart';
 import 'package:airbound/common%20widgets/commontextfield.dart';
 import 'package:airbound/Home/home.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../controller/auth_controller.dart';
+
 
 class loginpage extends StatefulWidget {
   const loginpage({super.key});
@@ -14,18 +16,14 @@ class loginpage extends StatefulWidget {
 }
 
 class _loginpageState extends State<loginpage> {
-  final AuthController controller = Get.put(AuthController());
+  var controller = Get.put(AuthController());
 
   bool isChecked = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
-  @override
-  void dispose() {
-    emailController.dispose();
-    passController.dispose();
-    super.dispose();
-  }
+
+
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = MediaQuery.of(context).size.width ;
@@ -33,76 +31,81 @@ class _loginpageState extends State<loginpage> {
 
     return Scaffold(
       appBar: AppBar(),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(bottom: verticalPadding*0.1),
+      body: Container(
+        height: double.infinity,
+        child: Stack(
+          children:[
+            Positioned(
+              top: verticalPadding * 0.25, // Adjust negative offset as needed
+              right: horizontalPadding * 0.1,
+              child: Transform.rotate(
+                angle: 45 * math.pi / 180, // 45 degree rotation
                 child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    image: const DecorationImage(
-                      image: AssetImage('assets/images/logo.png'),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.circular(32), // Optional: Rounded corners
-                  ),
+                  width: horizontalPadding * 2, // Adjust size as needed
+                  height: horizontalPadding * 2.1,
+                  color: const Color(0xFF006A67), // Green container (hex code)
                 ),
               ),
-              const Text("Login",style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),),
-              SizedBox(height: verticalPadding*0.03,),
-              commonTextfield(
-                controller: controller.emailController,
-                hinttext: "Email",
-                obstxt: false,
-                width: horizontalPadding*0.85 ,
-                height: verticalPadding*0.065,
+            ),
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: verticalPadding*0.18),
+                  const Text("Login",style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),),
+                  SizedBox(height: verticalPadding*0.06,),
+                  commonTextfield(
+                    controller: controller.emailController,
+                    hinttext: "Email",
+                    obstxt: false,
+                    width: horizontalPadding*0.85 ,
+                    height: verticalPadding*0.065,
+                  ),
+                  SizedBox(height: verticalPadding*0.01,),
+                  commonTextfield(
+                    controller: controller.passController,
+                    hinttext: "Password",
+                    obstxt: true,
+                    width: horizontalPadding*0.85 ,
+                    height: verticalPadding*0.065,
+                  ),
+                  SizedBox(height:verticalPadding*0.03),
+                  commonButton(
+                    onNavigate: ()async {
+                      UserCredential? userCredential =
+                      await controller.loginMethod(context: context);
+                      if (userCredential != null) {
+                        // If login is successful, navigate to Home
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Home()),
+                        );
+                      }
+                    },
+                    buttonName: "login",
+                    width: horizontalPadding*0.85,
+                    height: verticalPadding*0.07,
+                    clr: Color(0xFF006A67),
+                    txtclr: Colors.white,
+                  ),
+                  SizedBox(height:verticalPadding*0.04),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: horizontalPadding*0.12),
+                    child: Divider(height: 1,),
+                  ),
+                  Text("OR", style: TextStyle(fontSize: 18,),),
+                  SizedBox(height:verticalPadding*0.04),
+                  commonButton(
+                    onNavigate: (){},
+                    buttonName: "Continue with Google",
+                    width: horizontalPadding*0.85,
+                    height: verticalPadding*0.07,
+                    clr: Colors.white,
+                    txtclr: Colors.black,
+                  ),
+                ],
               ),
-              SizedBox(height: verticalPadding*0.01,),
-              commonTextfield(
-                controller: controller.passController,
-                hinttext: "Password",
-                obstxt: true,
-                width: horizontalPadding*0.85 ,
-                height: verticalPadding*0.065,
-              ),
-              SizedBox(height:verticalPadding*0.03),
-              commonButton(
-                onNavigate: () async {
-                  var userCredential = await controller.loginMethod(context: context);
-
-                  if (userCredential != null) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Home()),
-                    );
-                  }
-                },
-                buttonName: "login",
-                width: horizontalPadding*0.85,
-                height: verticalPadding*0.07,
-                clr: Colors.black,
-                txtclr: Colors.white,
-              ),
-              SizedBox(height:verticalPadding*0.04),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: horizontalPadding*0.12),
-                child: Divider(height: 1,),
-              ),
-              Text("OR", style: TextStyle(fontSize: 18,),),
-              SizedBox(height:verticalPadding*0.04),
-              commonButton(
-                onNavigate: (){},
-                buttonName: "Continue with Google",
-                width: horizontalPadding*0.85,
-                height: verticalPadding*0.07,
-                clr: Colors.white,
-                txtclr: Colors.black,
-              ),
-            ],
-          ),
+            ),
+          ]
         ),
       ),
     );

@@ -161,7 +161,7 @@ class _OnboardingScreenState extends State<Info> {
                         fontSize: isTablet ? 18 : 16,
                         fontWeight: FontWeight.bold,
                         color: _currentPage == _pages.length - 1
-                            ? Colors.black
+                            ? Color(0xFF006A67)
                             : Colors.white,
                       ),
                     ),

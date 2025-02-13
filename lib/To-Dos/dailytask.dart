@@ -20,12 +20,10 @@ class _DailytaskState extends State<Dailytask> {
           "Follow up",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.teal, // Set background color to black
-        iconTheme: const IconThemeData(color: Colors.white), // Change back button and icons to white
+        backgroundColor: Color(0xFF006A67),
         centerTitle: true, // Center the title text
-        elevation: 0, // Remove shadow
       ),
-      backgroundColor: Colors.grey[300], // Dark theme background
+      backgroundColor: Colors.grey[300],
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: screenWidth*0.06, vertical: screenHeight*0.02),
         child: Column(

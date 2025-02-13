@@ -20,7 +20,7 @@ class _signup1State extends State<Signup1> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xffff8066),
+        backgroundColor: Color(0xFF006A67),
         title: const Text(
           "Welcome to Airbound",
           style: TextStyle(color: Colors.white),

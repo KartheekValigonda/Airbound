@@ -28,11 +28,11 @@ class _openingpgState extends State<openingpg> {
               Padding(
                 padding: EdgeInsets.only(bottom: verticalPadding*0.07),
                 child: Container(
-                          width: 100,
-                          height: 100,
+                          width: 120,
+                          height: 120,
                           decoration: BoxDecoration(
                 image: const DecorationImage(
-                  image: AssetImage('assets/images/logo.png'),
+                  image: AssetImage('assets/images/logo.jpg'),
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.circular(32), // Optional: Rounded corners
@@ -42,7 +42,7 @@ class _openingpgState extends State<openingpg> {
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal:horizontalPadding*0.03,
-                    vertical: verticalPadding*0.02),
+                    vertical: verticalPadding*0.01),
                 child: const Text("Welcome to a  healthier life.", textAlign: TextAlign.center,style: TextStyle(fontSize: 36, fontWeight:FontWeight.w500),),
               ),
               const Text("Start your journey towards freedom from smoking and regain more time and health",textAlign: TextAlign.center,style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
@@ -52,7 +52,7 @@ class _openingpgState extends State<openingpg> {
                 buttonName: "Let's get started!",
                 width: horizontalPadding*0.8,
                 height: verticalPadding*0.06,
-                clr: Colors.black
+                  clr: Color(0xFF006A67)
               ),
               SizedBox(height: verticalPadding*0.02,),
               commonButton(

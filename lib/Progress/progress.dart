@@ -32,8 +32,8 @@ class _ProgressState extends State<Progress> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Track and Crack",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-        backgroundColor: Colors.teal,
-        elevation: 0,
+        backgroundColor: Color(0xFF006A67),
+        centerTitle: true,
       ),
       backgroundColor: Colors.grey[300],
       body: Padding(
