@@ -40,13 +40,13 @@ class _ProfileState extends State<Profile> {
         children: [
           // Green background container (rotated)
           Positioned(
-            top: -screenWidth * 0.15, // Adjust negative offset as needed
-            right: -screenWidth * 0.15,
+            top: -screenHeight * 0.1, // Adjust negative offset as needed
+            right: -screenWidth * 0.18,
             child: Transform.rotate(
-              angle: 45 * math.pi / 160, // Adjust rotation as needed
+              angle: 50 * math.pi / 180, // Adjust rotation as needed
               child: Container(
-                width: screenWidth,
-                height: screenWidth,
+                width: screenHeight*2,
+                height: screenWidth*2.1,
                 color: const Color(0xFF006A67), // Green container (hex code)
               ),
             ),
