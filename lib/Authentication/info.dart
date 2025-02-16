@@ -55,7 +55,7 @@ class _OnboardingScreenState extends State<Info> {
       height: 8,
       width: isActive ? 16 : 8,
       decoration: BoxDecoration(
-        color: isActive ? Colors.redAccent : Colors.grey,
+        color: isActive ? Colors.white : Colors.grey,
         borderRadius: BorderRadius.circular(4),
       ),
     );
@@ -70,7 +70,7 @@ class _OnboardingScreenState extends State<Info> {
 
     return Scaffold(
       body: Container(
-        color: _currentPage == _pages.length - 1 ? Colors.black : Colors.white, // Conditional background color
+        color: _currentPage == _pages.length - 1 ? Colors.black : Color(0xFF006A67), // Conditional background color
         child: SafeArea(
           child: Column(
             children: [
