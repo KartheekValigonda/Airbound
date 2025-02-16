@@ -86,10 +86,6 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "You last smoked: 5 days, 22 hours and 24 mins ago",
-                      style: TextStyle(fontSize: 18),
-                    ),
                     SizedBox(height: screenHeight * 0.01), // Add spacing
                     Center(
                       child: commonButton(
