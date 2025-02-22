@@ -19,10 +19,10 @@ Widget commonCard({
               width: width,
               height: height,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.white60,
                 borderRadius: BorderRadius.circular(22),
                 border: Border.all(
-                  color: Vx.teal400, // Change color as needed
+                  color: Vx.teal200, // Change color as needed
                   width: 1, // Border thickness
                 ),
               ),
