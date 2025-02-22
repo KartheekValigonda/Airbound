@@ -55,7 +55,7 @@ class _OnboardingScreenState extends State<Info> {
       height: 8,
       width: isActive ? 16 : 8,
       decoration: BoxDecoration(
-        color: isActive ? Colors.white : Colors.grey,
+        color: isActive ? Colors.teal : Colors.grey,
         borderRadius: BorderRadius.circular(4),
       ),
     );
@@ -70,7 +70,7 @@ class _OnboardingScreenState extends State<Info> {
 
     return Scaffold(
       body: Container(
-        color: _currentPage == _pages.length - 1 ? Colors.black : Color(0xFF006A67), // Conditional background color
+        color: _currentPage == _pages.length - 1 ? Colors.black : Colors.white, // Conditional background color
         child: SafeArea(
           child: Column(
             children: [
@@ -105,7 +105,7 @@ class _OnboardingScreenState extends State<Info> {
                             style: TextStyle(
                               fontSize: isTablet ? 28 : 24,
                               fontWeight: FontWeight.bold,
-                              color: isLastPage ? Colors.white : Colors.black,
+                              color: isLastPage ? Colors.white : Color(0xFF006A67),
                             ),
                           ),
                           SizedBox(height: screenHeight * 0.02),
@@ -118,7 +118,7 @@ class _OnboardingScreenState extends State<Info> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: isTablet ? 16 : 14,
-                                color: isLastPage ? Colors.grey[300] : Colors.grey,
+                                color: isLastPage ? Colors.grey[300] : Colors.teal,
                               ),
                             ),
                           ),
@@ -146,13 +146,13 @@ class _OnboardingScreenState extends State<Info> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _currentPage == _pages.length - 1
                           ? Colors.white
-                          : Colors.black,
+                          : Color(0xFF006A67),
                       padding: EdgeInsets.symmetric(
-                        horizontal: isTablet ? 60 : 50,
-                        vertical: isTablet ? 18 : 16,
+                        horizontal: isTablet ? 60 : 90,
+                        vertical: isTablet ? 18 : 14,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(26),
                       ),
                     ),
                     child: Text(

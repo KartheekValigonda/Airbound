@@ -11,11 +11,9 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  // Logout method that signs out the user and navigates to the LoginScreen.
   Future<void> logoutMethod() async {
     try {
       await FirebaseAuth.instance.signOut();
-      // Navigate to the LoginScreen, replacing the current route.
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const loginpage()),
       );
@@ -33,21 +31,21 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final theme = Theme.of(context); // Access theme data
 
     return Scaffold(
-      backgroundColor: Colors.grey[300], // Light grey background
       body: Stack(
         children: [
           // Green background container (rotated)
           Positioned(
-            top: -screenHeight * 0.1, // Adjust negative offset as needed
-            right: -screenWidth * 0.18,
+            top: -screenHeight * 0.1,
+            right: -screenWidth * 0.2,
             child: Transform.rotate(
-              angle: 50 * math.pi / 180, // Adjust rotation as needed
+              angle: 52 * math.pi / 180,
               child: Container(
-                width: screenHeight*2,
-                height: screenWidth*2.1,
-                color: const Color(0xFF006A67), // Green container (hex code)
+                width: screenHeight * 2,
+                height: screenWidth * 2.1,
+                color: theme.colorScheme.primary, // Use primary color from theme
               ),
             ),
           ),
@@ -60,18 +58,19 @@ class _ProfileState extends State<Profile> {
                     const CircleAvatar(
                       radius: 70,
                       backgroundImage: NetworkImage(
-                        "https://i.pravatar.cc/150", // Replace with actual image
+                        "https://i.pravatar.cc/150",
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
+                    Text(
                       "James Smith",
-                      style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: theme.textTheme.bodyLarge
+                          ?.copyWith(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
-                    const Text(
+                    Text(
                       "smith@gmail.com",
-                      style: TextStyle(color: Colors.grey),
+                      style: theme.textTheme.bodyMedium
+                          ?.copyWith(color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7)),
                     ),
                   ],
                 ),
@@ -83,7 +82,7 @@ class _ProfileState extends State<Profile> {
                   padding:
                   EdgeInsets.symmetric(horizontal: screenWidth * 0.055),
                   child: Card(
-                    color: Colors.white,
+                    color: theme.cardColor, // Use card color from theme
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -97,17 +96,17 @@ class _ProfileState extends State<Profile> {
                             Icons.policy, "Privacy policy", context),
                         _buildSettingsOption(
                             Icons.help_outline, "Help and support", context),
-                        const Divider(),
+                        Divider(color: theme.dividerColor),
                         ListTile(
-                          leading: const Icon(Icons.logout, color: Colors.red),
+                          leading: const Icon(Icons.logout, color: Colors.black),
                           title: const Text(
                             "Log out",
-                            style: TextStyle(color: Colors.red),
+                            style: TextStyle(color: Colors.black),
                           ),
                           onTap: () {
                             logoutMethod();
                           },
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -123,12 +122,14 @@ class _ProfileState extends State<Profile> {
   // Widget for Settings Options
   Widget _buildSettingsOption(
       IconData icon, String title, BuildContext context) {
+    final theme = Theme.of(context);
+
     return ListTile(
-      leading: Icon(icon, color: Colors.teal),
-      title: Text(title),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+      leading: Icon(icon, color: theme.colorScheme.primary),
+      title: Text(title, style: theme.textTheme.bodyLarge),
+      trailing: Icon(Icons.arrow_forward_ios,
+          size: 16, color: theme.iconTheme.color?.withOpacity(0.7)),
       onTap: () {},
     );
   }
 }
-

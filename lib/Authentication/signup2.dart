@@ -1,3 +1,4 @@
+import 'package:airbound/Authentication/verificationScreen.dart';
 import 'package:airbound/Home/home.dart';
 import 'package:airbound/common%20widgets/commonbutton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,10 +8,16 @@ import '../controller/auth_controller.dart';
 import 'dart:math' as math;
 
 
-class Signup2 extends StatelessWidget {
+class Signup2 extends StatefulWidget {
   Signup2({super.key});
 
+  @override
+  State<Signup2> createState() => _Signup2State();
+}
+
+class _Signup2State extends State<Signup2> {
   final AuthController controller = Get.put(AuthController());
+
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController emailController = TextEditingController();
@@ -127,9 +134,7 @@ class Signup2 extends StatelessWidget {
                               );
 
                               if (userCredential.user != null) {
-                                Get.snackbar("Success", "Account created successfully!",
-                                    backgroundColor: Colors.teal, colorText: Colors.white);
-                                Get.offAll(() => Home());
+                                Get.offAll(() => VerificationScreen());
                               }
                             } on FirebaseAuthException catch (e) {
                               Get.snackbar("Signup Error", e.message ?? "Something went wrong",

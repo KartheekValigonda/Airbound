@@ -1,5 +1,8 @@
+import 'package:airbound/Home/home.dart';
+import 'package:airbound/Theme/theme.dart';
 import 'package:airbound/openingpg.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,10 +24,9 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'AirBound',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: AppThemes.lightTheme, // Light theme
+      darkTheme: AppThemes.darkTheme, // Dark theme
+      themeMode: ThemeMode.system,
       home: const SplashScreen(), // Set the splash screen as the initial screen.
     );
   }
@@ -61,7 +63,12 @@ class _SplashScreenState extends State<SplashScreen>
 
     // Delay for 3 seconds before navigating to the opening page.
     Future.delayed(const Duration(seconds: 3), () {
-      Get.offAll(() => openingpg());
+      User? user = FirebaseAuth.instance.currentUser;
+      if(user != null){
+        Get.offAll(()=> Home());
+      }else{
+        Get.offAll(() => openingpg());
+      }
     });
   }
 

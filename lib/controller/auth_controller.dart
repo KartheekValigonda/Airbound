@@ -5,20 +5,21 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter/material.dart';
 
 
-class AuthController extends GetxController{
+class AuthController extends GetxController {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
   //login method
-  Future<UserCredential?> loginMethod({context}) async{
+  Future<UserCredential?> loginMethod({context}) async {
     UserCredential? userCredential;
 
-    try{
+    try {
       userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passController.text);
-    } on FirebaseAuthException catch(e){
-      VxToast.show(context, msg: e.toString());
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar("Login Error", e.message ?? "Something went wrong",
+          backgroundColor: Colors.black45, colorText: Colors.white);
     }
 
     return userCredential;
@@ -26,14 +27,15 @@ class AuthController extends GetxController{
 
 
   //signup method
-  Future<UserCredential?> signupMethod({name, email, password, context}) async{
+  Future<UserCredential?> signupMethod({name, email, password, context}) async {
     UserCredential? userCredential;
 
     try {
-      userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      userCredential =
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email, password: password);
       await storeUserData(name: name, email: email, password: password);
-    } on FirebaseAuthException catch(e){
+    } on FirebaseAuthException catch (e) {
       VxToast.show(context, msg: e.toString());
     }
     return userCredential;
@@ -41,8 +43,9 @@ class AuthController extends GetxController{
 
 
   //storing data
-  Future<void> storeUserData({name, email, password}) async{
-    DocumentReference store = FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid);
+  Future<void> storeUserData({name, email, password}) async {
+    DocumentReference store = FirebaseFirestore.instance.collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid);
     await store.set({
       'name': name,
       'email': email,
@@ -50,14 +53,13 @@ class AuthController extends GetxController{
     });
   }
 
-  //logout method
-  Future<void> logout() async {
+
+  // email verification
+  Future<void> sendEmailVerification({context}) async{
     try {
-      await FirebaseAuth.instance.signOut();
-      // Show a toast using Get.context (ensure Get.context is not null)
-      VxToast.show(Get.context!, msg: "Successfully logged out");
-    } catch (e) {
-      VxToast.show(Get.context!, msg: 'Logout failed: ${e.toString()}');
+      await FirebaseAuth.instance.currentUser?.sendEmailVerification();
+    } on FirebaseAuthException catch (e) {
+      VxToast.show(context, msg: e.toString());
     }
   }
 }
