@@ -26,51 +26,86 @@ class _DailytaskState extends State<Dailytask> {
         title: const Text("Follow up"),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: screenWidth * 0.06, vertical: screenHeight * 0.02),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: screenHeight * 0.022),
-            // Title
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Today's schedule",
-                  style: theme.textTheme.headlineSmall?.copyWith(fontSize: 28),
-                ),
-                const CircleAvatar(
-                  backgroundImage: NetworkImage("https://i.pravatar.cc/150"),
-                  radius: 25,
-                ),
-              ],
-            ),
-            const SizedBox(height: 5),
-            Text(
-              getFormattedDate(), // Display real date
-              style: TextStyle(fontSize: 22, color: theme.colorScheme.primary),
-            ),
-            const SizedBox(height: 20),
-            // Task List
-            Expanded(
-              child: ListView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.06, vertical: screenHeight * 0.02),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: screenHeight * 0.022),
+              // Title
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  taskItem(true, "A Glass Of water", Icons.alarm,
-                      theme.colorScheme.primary, details: ["06:00 hrs"]),
-                  taskItem(false, "Morning Run", Icons.directions_run,
-                      theme.colorScheme.primary, details: ["06:00 hrs"]),
-                  taskItem(false, "Daily workout", Icons.fitness_center,
-                      theme.colorScheme.primary, details: ["06:00 hrs"]),
-                  taskItem(false, "Morning Run", Icons.laptop,
-                      theme.colorScheme.primary, details: ["06:00 hrs"]),
-                  taskItem(false, "Morning Run", Icons.restaurant,
-                      theme.colorScheme.primary, details: ["06:00 hrs"]),
+                  Text(
+                    "Structuring Your \nDaily Routine",
+                    style: theme.textTheme.headlineSmall?.copyWith(fontSize: 26),
+                  ),
+                  const CircleAvatar(
+                    backgroundImage: NetworkImage("https://i.pravatar.cc/150"),
+                    radius: 25,
+                  ),
                 ],
               ),
-            ),
-          ],
+              SizedBox(height: screenHeight*0.02),
+              Text(
+                getFormattedDate(), // Display real date
+                style: TextStyle(fontSize: 22, color: theme.colorScheme.primary),
+              ),
+              SizedBox(height: screenHeight*0.02),
+              // Task List
+              Text(
+                "Morning Session:", // Display real date
+                style: TextStyle(fontSize: 19, color: theme.colorScheme.primary),
+              ),
+              SizedBox(height: screenHeight*0.02),
+              ListView(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  taskItem(true, "Warm-Up", Icons.bubble_chart_sharp,
+                      theme.colorScheme.primary, details: ["5–10 minutes of dynamic stretching or light cardio"]),
+                  taskItem(false, "Cardio", Icons.directions_run,
+                      theme.colorScheme.primary, details: ["20–30 minutes of brisk walking, jogging, or cycling."]),
+                  taskItem(false, "Cool-Down", Icons.air_outlined,
+                      theme.colorScheme.primary, details: ["5 minutes of walking followed by static stretching."]),
+                ],
+              ),
+              SizedBox(height: screenHeight*0.02),
+              Text(
+                "Midday Session:", // Display real date
+                style: TextStyle(fontSize: 19, color: theme.colorScheme.primary),
+              ),
+              SizedBox(height: screenHeight*0.02),
+              ListView(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  taskItem(true, "Strength & Training", Icons.fitness_center,
+                      theme.colorScheme.primary, details: ["15–20 minutes (alternating days with cardio)."]),
+                  taskItem(false, "Breathing Exercises", Icons.air_sharp,
+                      theme.colorScheme.primary, details: ["5 minutes of deep breathing or meditation."]),
+                ],
+              ),
+              SizedBox(height: screenHeight*0.02),
+              Text(
+                "Evening Session:", // Display real date
+                style: TextStyle(fontSize: 19, color: theme.colorScheme.primary),
+              ),
+              SizedBox(height: screenHeight*0.02),
+              ListView(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  taskItem(true, "Yoga", Icons.sports_gymnastics,
+                      theme.colorScheme.primary, details: ["20–30 minutes (a calming yoga session or a leisurely walk outdoors)."]),
+                  taskItem(false, "Cardio", Icons.directions_run,
+                      theme.colorScheme.primary, details: ["5 minutes of stretching to relax your muscles."]),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -107,12 +142,12 @@ class _DailytaskState extends State<Dailytask> {
             detail,
             style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.textTheme.bodyMedium?.color
-                    ?.withOpacity(0.7)),
+                    ?.withValues()),
           ))
               .toList(),
         )
             : null,
-        tileColor: isChecked ? iconColor.withOpacity(0.2) : null,
+        tileColor: isChecked ? iconColor.withValues() : null,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         trailing: Icon(icon, color: iconColor),
       ),

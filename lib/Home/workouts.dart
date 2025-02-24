@@ -33,7 +33,7 @@ class Workouts extends StatelessWidget {
   final List<Exercise> strengthTraining = [
     Exercise(
       name: 'Push-Ups',
-      icon: Icons.sports_mma_rounded,
+      icon: Icons.fitness_center,
       instructions:
       'Reps/Sets: 2–3 sets of 10–15 reps\nBenefits: Builds upper body strength and improves endurance.',
     ),
