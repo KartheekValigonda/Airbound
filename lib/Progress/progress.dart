@@ -175,27 +175,32 @@ class _ProgressState extends State<Progress> {
                     color: theme.colorScheme.secondary,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.remove_circle,
-                            size: 32, color: theme.iconTheme.color?.withValues()),
-                        onPressed: decrement,
+                  child: Column(
+                    children:[
+                      Text("Today, You have smoked"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.remove_circle,
+                                size: 32, color: theme.iconTheme.color?.withValues()),
+                            onPressed: decrement,
+                          ),
+                          Text(
+                            "$smokedToday",
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orange,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.add_circle, size: 32, color: Colors.orange),
+                            onPressed: increment,
+                          ),
+                        ],
                       ),
-                      Text(
-                        "$smokedToday",
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.orange,
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.add_circle, size: 32, color: Colors.orange),
-                        onPressed: increment,
-                      ),
-                    ],
+                    ]
                   ),
                 ),
               ),
@@ -207,7 +212,7 @@ class _ProgressState extends State<Progress> {
               SizedBox(height: screenHeight * 0.01),
               Center(
                 child: Container(
-                  width: screenWidth * 0.83,
+                  width: screenWidth * 0.87,
                   height: screenHeight * 0.065,
                   padding: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.03, vertical: screenHeight * 0.01),
@@ -237,21 +242,19 @@ class _ProgressState extends State<Progress> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  infoCard("₹$misspend", "Misspend", Icons.attach_money, screenWidth * 0.4),
-                  infoCard("$cigsmk", "cigs smoked", Icons.smoke_free, screenWidth * 0.4),
+                  infoCard("₹$misspend", "Misspend", Icons.attach_money, screenWidth * 0.42),
+                  infoCard("$cigsmk", "cigs smoked", Icons.smoke_free, screenWidth * 0.42),
                 ],
               ),
               SizedBox(height: screenHeight * 0.015),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  infoCard("$life mins", "life reduced", Icons.favorite, screenWidth * 0.4),
+                  infoCard("$life mins", "life reduced", Icons.favorite, screenWidth * 0.42),
                   infoCard("$nic mg", "Nicotine Consumed", Icons.bubble_chart,
-                      screenWidth * 0.4),
+                      screenWidth * 0.42),
                 ],
               ),
-              SizedBox(height: screenHeight * 0.025),
-              _sinceYouJoined(),
             ],
           ),
         ),
@@ -259,42 +262,6 @@ class _ProgressState extends State<Progress> {
     );
   }
 
-  Widget _sinceYouJoined() {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final theme = Theme.of(context);
-
-    return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(color: Colors.grey.withValues(), blurRadius: 4),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _infoCardSmall("Doc", "Days Tracked", Icons.list),
-                SizedBox(width: screenWidth * 0.05),
-                _infoCardSmall("Doc", "Cigarettes Smoked", Icons.list),
-                SizedBox(width: screenWidth * 0.05),
-                _infoCardSmall("Doc", "Cigarettes Smoked", Icons.list),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _infoCardSmall(String value, String label, IconData icon) {
     final screenWidth = MediaQuery.of(context).size.width;
