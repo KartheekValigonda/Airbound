@@ -24,8 +24,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'AirBound',
-      theme: AppThemes.lightTheme, // Light theme
-      darkTheme: AppThemes.darkTheme, // Dark theme
+      theme: AppThemes.appTheme,
       themeMode: ThemeMode.system,
       home: const SplashScreen(), // Set the splash screen as the initial screen.
     );

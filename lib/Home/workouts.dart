@@ -175,7 +175,6 @@ class Workouts extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth*0.02, vertical: screenHeight*0.001),
       child: Card(
-        elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: ExpansionTile(
           leading: Icon(

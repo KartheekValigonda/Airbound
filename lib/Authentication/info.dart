@@ -70,7 +70,7 @@ class _OnboardingScreenState extends State<Info> {
 
     return Scaffold(
       body: Container(
-        color: _currentPage == _pages.length - 1 ? Colors.black : Colors.white, // Conditional background color
+        color: _currentPage == _pages.length - 1 ? Colors.black : Theme.of(context).scaffoldBackgroundColor, // Conditional background color
         child: SafeArea(
           child: Column(
             children: [
@@ -105,7 +105,7 @@ class _OnboardingScreenState extends State<Info> {
                             style: TextStyle(
                               fontSize: isTablet ? 28 : 24,
                               fontWeight: FontWeight.bold,
-                              color: isLastPage ? Colors.white : Color(0xFF006A67),
+                              color: isLastPage ? Theme.of(context).scaffoldBackgroundColor : Color(0xFF006A67),
                             ),
                           ),
                           SizedBox(height: screenHeight * 0.02),
@@ -145,7 +145,7 @@ class _OnboardingScreenState extends State<Info> {
                     onPressed: _onNextPressed,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _currentPage == _pages.length - 1
-                          ? Colors.white
+                          ? Theme.of(context).scaffoldBackgroundColor
                           : Color(0xFF006A67),
                       padding: EdgeInsets.symmetric(
                         horizontal: isTablet ? 60 : 90,
@@ -162,7 +162,7 @@ class _OnboardingScreenState extends State<Info> {
                         fontWeight: FontWeight.bold,
                         color: _currentPage == _pages.length - 1
                             ? Color(0xFF006A67)
-                            : Colors.white,
+                            : Theme.of(context).scaffoldBackgroundColor,
                       ),
                     ),
                   ),

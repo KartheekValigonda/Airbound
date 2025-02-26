@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:airbound/Home/Start_here.dart';
 import 'package:airbound/Home/second_slide.dart';
+import 'package:airbound/Home/some_ques.dart';
+import 'package:airbound/Home/whyquit.dart';
 import 'package:airbound/Home/workouts.dart';
 import 'package:airbound/Progress/progress.dart';
 import 'package:airbound/To-Dos/dailytask.dart';
@@ -230,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               GestureDetector(
                 onTap: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => Placeholder())),
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => SomeQues())),
                 child: commonCard(
                   text: "Some Important Questions",
                   horizontal: screenWidth * 0.01,
@@ -247,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: screenHeight * 0.02),
               GestureDetector(
                 onTap: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => Placeholder())),
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => Whyquit())),
                 child: commonCard(
                   text: "Why I Want to Quit",
                   horizontal: screenWidth * 0.01,

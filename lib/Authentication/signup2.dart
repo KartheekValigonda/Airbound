@@ -1,3 +1,4 @@
+import 'package:airbound/Authentication/loginpage.dart';
 import 'package:airbound/Authentication/verificationScreen.dart';
 import 'package:airbound/Home/home.dart';
 import 'package:airbound/common%20widgets/commonbutton.dart';
@@ -162,6 +163,14 @@ class _Signup2State extends State<Signup2> {
                         clr: Colors.white,
                         txtclr: Colors.black,
                       ),
+                      SizedBox(height: verticalPadding*0.03),
+                      InkWell(
+                          child: Text("Already have an account! LogIn"),
+                        onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> loginpage()));
+                        },
+
+                      )
                     ],
                   ),
                 ),

@@ -17,11 +17,6 @@ class _openingpgState extends State<openingpg> {
     final horizontalPadding = MediaQuery.of(context).size.width ;
     final verticalPadding = MediaQuery.of(context).size.height;
     return  Scaffold(
-
-      appBar:AppBar(
-        title:const Text(""),
-      ),
-
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: horizontalPadding*0.1, vertical: verticalPadding*0.1 ),
         child: SingleChildScrollView(
