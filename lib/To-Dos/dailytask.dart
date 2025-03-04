@@ -59,7 +59,7 @@ class _DailytaskState extends State<Dailytask> {
                 "Morning Session:", // Display real date
                 style: TextStyle(fontSize: 19, color: theme.colorScheme.primary),
               ),
-              SizedBox(height: screenHeight*0.02),
+              SizedBox(height: screenHeight*0.03),
               ListView(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
