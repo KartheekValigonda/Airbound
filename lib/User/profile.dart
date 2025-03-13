@@ -15,7 +15,7 @@ class _ProfileState extends State<Profile> {
     try {
       await FirebaseAuth.instance.signOut();
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const loginpage()),
+        MaterialPageRoute(builder: (context) => const LoginPage()),
       );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Logged out successfully")),
@@ -34,85 +34,69 @@ class _ProfileState extends State<Profile> {
     final theme = Theme.of(context); // Access theme data
 
     return Scaffold(
-      body: Stack(
+      backgroundColor: const Color(0xFF006A67),
+      body: Column(
         children: [
-          // Green background container (rotated)
-          Positioned(
-            top: -screenHeight * 0.1,
-            right: -screenWidth * 0.2,
-            child: Transform.rotate(
-              angle: 52 * math.pi / 180,
-              child: Container(
-                width: screenHeight * 2,
-                height: screenWidth * 2.1,
-                color: theme.colorScheme.primary, // Use primary color from theme
-              ),
+          SizedBox(height: screenHeight * 0.12),
+          Center(
+            child: Column(
+              children: [
+                const CircleAvatar(
+                  radius: 70,
+                  backgroundImage: NetworkImage(
+                    "https://i.pravatar.cc/150",
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "James Smith",
+                  style: theme.textTheme.bodyLarge
+                      ?.copyWith(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                Text(
+                  "smith@gmail.com",
+                  style: theme.textTheme.bodyMedium
+                      ?.copyWith(color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7)),
+                ),
+              ],
             ),
           ),
-          Column(
-            children: [
-              SizedBox(height: screenHeight * 0.12),
-              Center(
+          SizedBox(height: screenHeight * 0.03),
+          // Settings Options
+          Expanded(
+            child: Padding(
+              padding:
+              EdgeInsets.symmetric(horizontal: screenWidth * 0.055),
+              child: Card(
+                color: theme.cardColor, // Use card color from theme
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 child: Column(
                   children: [
-                    const CircleAvatar(
-                      radius: 70,
-                      backgroundImage: NetworkImage(
-                        "https://i.pravatar.cc/150",
+                    _buildSettingsOption(
+                        Icons.account_balance, "Account setup", context),
+                    _buildSettingsOption(
+                        Icons.person, "Profile setting", context),
+                    _buildSettingsOption(
+                        Icons.policy, "Privacy policy", context),
+                    _buildSettingsOption(
+                        Icons.help_outline, "Help and support", context),
+                    Divider(color: theme.dividerColor),
+                    ListTile(
+                      leading: const Icon(Icons.logout, color: Colors.black),
+                      title: const Text(
+                        "Log out",
+                        style: TextStyle(color: Colors.black),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      "James Smith",
-                      style: theme.textTheme.bodyLarge
-                          ?.copyWith(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    Text(
-                      "smith@gmail.com",
-                      style: theme.textTheme.bodyMedium
-                          ?.copyWith(color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7)),
+                      onTap: () {
+                        logoutMethod();
+                      },
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: screenHeight * 0.03),
-              // Settings Options
-              Expanded(
-                child: Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenWidth * 0.055),
-                  child: Card(
-                    color: theme.cardColor, // Use card color from theme
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      children: [
-                        _buildSettingsOption(
-                            Icons.account_balance, "Account setup", context),
-                        _buildSettingsOption(
-                            Icons.person, "Profile setting", context),
-                        _buildSettingsOption(
-                            Icons.policy, "Privacy policy", context),
-                        _buildSettingsOption(
-                            Icons.help_outline, "Help and support", context),
-                        Divider(color: theme.dividerColor),
-                        ListTile(
-                          leading: const Icon(Icons.logout, color: Colors.black),
-                          title: const Text(
-                            "Log out",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          onTap: () {
-                            logoutMethod();
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),

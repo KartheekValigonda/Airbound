@@ -49,19 +49,16 @@ class _VerificationScreenState extends State<VerificationScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF006A67),
-        title: const Text(
-          "Verify Your Email", textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white),
-        ),
+        title: Text("Verify Your Email",),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: screenWidth*0.06,),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('A verification email has been sent', style: TextStyle(color: Colors.black, fontSize: 20)),
+            Text('A verification email has been sent', style: Theme.of(context).textTheme.bodyLarge,),
             SizedBox(height: screenHeight*0.02),
-            Text('Please check your mail inbox and verify your email.',style: TextStyle(color: Colors.black, fontSize: 18)),
+            Text('Please check your mail inbox and verify your email.',style: Theme.of(context).textTheme.bodyMedium,),
             SizedBox(height: screenHeight*0.1),
             ElevatedButton(
               onPressed: () async {

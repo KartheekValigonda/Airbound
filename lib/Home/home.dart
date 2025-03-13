@@ -145,15 +145,15 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("A New", style: theme.textTheme.headlineSmall),
-              Text("Journey Begins", style: theme.textTheme.headlineSmall),
+              Text("A New", style: theme.textTheme.titleLarge),
+              Text("Journey Begins", style: theme.textTheme.titleLarge),
               SizedBox(height: screenHeight * 0.025),
 
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(horizontal: screenWidth*0.02, vertical: screenHeight*0.02),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.secondary, // Use secondary color from theme
+                  color: Color(0xFF006A67),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -161,18 +161,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Text(
                       "You last smoked: ",
-                      style: TextStyle(
-                          fontSize: 18, color: theme.colorScheme.primary),
+                      style: theme.textTheme.bodySmall
                     ),
                     Text(
                       timeSinceLastSmoke,
-                      style: TextStyle(
-                          fontSize: 15, color: theme.colorScheme.primary),
+                      style: theme.textTheme.bodySmall
                     ),
                     Text(
                       "Keep it Up!! Continue The Streak",
-                      style: TextStyle(
-                          fontSize: 15, color: theme.colorScheme.primary),
+                      style: theme.textTheme.bodySmall
                     ),
                     SizedBox(height: screenHeight * 0.01),
                     commonButton(
@@ -185,10 +182,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: screenWidth * 0.6,
                       height: screenHeight * 0.04,
                       buttonName: "Track Your Progress",
-                      txtclr: theme.colorScheme.primary,
-                      clr: theme.elevatedButtonTheme.style?.backgroundColor
-                          ?.resolve({}) ??
-                          Colors.teal,
+                      txtclr: Colors.black,
+                      clr: Colors.white70,
                     ),
                   ],
                 ),
@@ -198,13 +193,13 @@ class _HomeScreenState extends State<HomeScreen> {
               Center(
                 child: Text(
                   "Introduction",
-                  style: theme.textTheme.headlineSmall?.copyWith(fontSize: 24),
+                    style: theme.textTheme.bodyLarge
                 ),
               ),
               SizedBox(height: screenHeight * 0.005),
               Text(
                 "Modules",
-                style: theme.textTheme.headlineSmall?.copyWith(fontSize: 20),
+                  style: theme.textTheme.bodyMedium
               ),
               SizedBox(height: screenHeight * 0.015),
 
@@ -216,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   horizontal: screenWidth * 0.01,
                   vertical: screenHeight * 0.01,
                   width: screenWidth * 0.88,
-                  height: screenHeight * 0.11,
+                  height: screenHeight * 0.088,
                 ),
               ),
               GestureDetector(
@@ -227,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   horizontal: screenWidth * 0.01,
                   vertical: screenHeight * 0.01,
                   width: screenWidth * 0.88,
-                  height: screenHeight * 0.11,
+                  height: screenHeight * 0.088,
                 ),
               ),
               GestureDetector(
@@ -238,13 +233,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   horizontal: screenWidth * 0.01,
                   vertical: screenHeight * 0.01,
                   width: screenWidth * 0.88,
-                  height: screenHeight * 0.11,
+                  height: screenHeight * 0.088,
                 ),
               ),
               SizedBox(height: screenHeight * 0.02),
               Text(
                 "Exercises",
-                style: theme.textTheme.headlineSmall?.copyWith(fontSize: 20),
+                  style: theme.textTheme.bodyMedium
               ),
               SizedBox(height: screenHeight * 0.02),
               GestureDetector(
@@ -255,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   horizontal: screenWidth * 0.01,
                   vertical: screenHeight * 0.01,
                   width: screenWidth * 0.88,
-                  height: screenHeight * 0.11,
+                  height: screenHeight * 0.088,
                 ),
               ),
               GestureDetector(
@@ -266,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   horizontal: screenWidth * 0.01,
                   vertical: screenHeight * 0.01,
                   width: screenWidth * 0.88,
-                  height: screenHeight * 0.11,
+                  height: screenHeight * 0.088,
                 ),
               ),
             ],

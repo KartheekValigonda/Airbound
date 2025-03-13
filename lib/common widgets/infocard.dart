@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
 
-Widget infoCard(String value, String label, IconData icon, double width) {
+Widget infoCard(String value, String label, IconData icon, double width, double height) {
   return Builder(
     builder: (context) {
       final theme = Theme.of(context);
       return Container(
         width: width,
+        height: height,
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
-          color: theme.cardColor, // Background from theme
+          color: Theme.of(context).appBarTheme.backgroundColor, // Background from theme
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: theme.colorScheme.primary, size: 28),
+            Icon(icon, color: Colors.black, size: 20),
             const SizedBox(height: 5),
             Text(
               value,
-              style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+                style: theme.textTheme.bodySmall
             ),
             const SizedBox(height: 3),
             Text(
               label,
-              style: theme.textTheme.bodyMedium,
+              style: theme.textTheme.bodySmall,
+              textAlign: TextAlign.center,
             ),
           ],
         ),

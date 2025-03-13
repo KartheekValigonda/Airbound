@@ -38,10 +38,7 @@ class _DailytaskState extends State<Dailytask> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Structuring Your \nDaily Routine",
-                    style: theme.textTheme.headlineSmall?.copyWith(fontSize: 26),
-                  ),
+                  Text("Structuring Your \nDaily Routine", style: theme.textTheme.bodyLarge),
                   const CircleAvatar(
                     backgroundImage: NetworkImage("https://i.pravatar.cc/150"),
                     radius: 25,
@@ -51,13 +48,13 @@ class _DailytaskState extends State<Dailytask> {
               SizedBox(height: screenHeight*0.02),
               Text(
                 getFormattedDate(), // Display real date
-                style: TextStyle(fontSize: 22, color: theme.colorScheme.primary),
+                  style: theme.textTheme.bodyMedium
               ),
               SizedBox(height: screenHeight*0.02),
               // Task List
               Text(
                 "Morning Session:", // Display real date
-                style: TextStyle(fontSize: 19, color: theme.colorScheme.primary),
+                  style: theme.textTheme.bodyMedium
               ),
               SizedBox(height: screenHeight*0.03),
               ListView(
@@ -65,33 +62,17 @@ class _DailytaskState extends State<Dailytask> {
                 physics: NeverScrollableScrollPhysics(),
                 children: [
                   taskItem(true, "Warm-Up", Icons.bubble_chart_sharp,
-                      theme.colorScheme.primary, details: ["5–10 minutes of dynamic stretching or light cardio"]),
+                      Colors.black, details: ["5–10 minutes of dynamic stretching or light cardio"]),
                   taskItem(false, "Cardio", Icons.directions_run,
-                      theme.colorScheme.primary, details: ["20–30 minutes of brisk walking, jogging, or cycling."]),
+                      Colors.black, details: ["20–30 minutes of brisk walking, jogging, or cycling."]),
                   taskItem(false, "Cool-Down", Icons.air_outlined,
-                      theme.colorScheme.primary, details: ["5 minutes of walking followed by static stretching."]),
-                ],
-              ),
-              SizedBox(height: screenHeight*0.02),
-              Text(
-                "Midday Session:", // Display real date
-                style: TextStyle(fontSize: 19, color: theme.colorScheme.primary),
-              ),
-              SizedBox(height: screenHeight*0.02),
-              ListView(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  taskItem(true, "Strength & Training", Icons.fitness_center,
-                      theme.colorScheme.primary, details: ["15–20 minutes (alternating days with cardio)."]),
-                  taskItem(false, "Breathing Exercises", Icons.air_sharp,
-                      theme.colorScheme.primary, details: ["5 minutes of deep breathing or meditation."]),
+                      Colors.black, details: ["5 minutes of walking followed by static stretching."]),
                 ],
               ),
               SizedBox(height: screenHeight*0.02),
               Text(
                 "Evening Session:", // Display real date
-                style: TextStyle(fontSize: 19, color: theme.colorScheme.primary),
+                style: TextStyle(fontSize: 19, color: Colors.black),
               ),
               SizedBox(height: screenHeight*0.02),
               ListView(
@@ -99,9 +80,9 @@ class _DailytaskState extends State<Dailytask> {
                 physics: NeverScrollableScrollPhysics(),
                 children: [
                   taskItem(true, "Yoga", Icons.sports_gymnastics,
-                      theme.colorScheme.primary, details: ["20–30 minutes (a calming yoga session or a leisurely walk outdoors)."]),
+                      Colors.black, details: ["20–30 minutes (a calming yoga session or a leisurely walk outdoors)."]),
                   taskItem(false, "Cardio", Icons.directions_run,
-                      theme.colorScheme.primary, details: ["5 minutes of stretching to relax your muscles."]),
+                      Colors.black, details: ["5 minutes of stretching to relax your muscles."]),
                 ],
               ),
             ],
@@ -121,7 +102,7 @@ class _DailytaskState extends State<Dailytask> {
     return Container(
       margin: EdgeInsets.only(bottom: screenHeight * 0.015), // Should be 'bottom'
       decoration: BoxDecoration(
-        color: theme.cardColor, // Use card color from theme
+        color: theme.appBarTheme.backgroundColor, // Use card color from theme
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
@@ -130,7 +111,7 @@ class _DailytaskState extends State<Dailytask> {
           children: [
             Text(
               title,
-              style: theme.textTheme.bodyLarge?.copyWith(fontSize: 18),
+                style: theme.textTheme.bodyMedium
             ),
           ],
         ),
@@ -140,9 +121,7 @@ class _DailytaskState extends State<Dailytask> {
           children: details
               .map((detail) => Text(
             detail,
-            style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.textTheme.bodyMedium?.color
-                    ?.withValues()),
+              style: theme.textTheme.bodySmall
           ))
               .toList(),
         )

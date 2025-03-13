@@ -8,14 +8,14 @@ import 'package:airbound/common%20widgets/commontextfield.dart';
 import 'package:airbound/Home/home.dart';
 import '../controller/auth_controller.dart';
 
-class loginpage extends StatefulWidget {
-  const loginpage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<loginpage> createState() => _loginpageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _loginpageState extends State<loginpage> {
+class _LoginPageState extends State<LoginPage> {
   var controller = Get.put(AuthController());
 
   bool isChecked = false;
@@ -28,7 +28,7 @@ class _loginpageState extends State<loginpage> {
     final verticalPadding = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: double.infinity,
         child: Stack(children: [
           Positioned(
@@ -47,40 +47,36 @@ class _loginpageState extends State<loginpage> {
             child: Column(
               children: [
                 SizedBox(height: verticalPadding * 0.18),
-                const Text(
+                Text(
                   "Login",
-                  style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 SizedBox(
-                  height: verticalPadding * 0.06,
+                  height: verticalPadding * 0.08,
                 ),
                 commonTextfield(
                   controller: controller.emailController,
                   hinttext: "Email",
                   obstxt: false,
                   width: horizontalPadding * 0.85,
-                  height: verticalPadding * 0.065,
+                  height: verticalPadding * 0.07,
                 ),
                 SizedBox(
-                  height: verticalPadding * 0.01,
+                  height: verticalPadding * 0.015,
                 ),
                 commonTextfield(
                   controller: controller.passController,
                   hinttext: "Password",
                   obstxt: true,
                   width: horizontalPadding * 0.85,
-                  height: verticalPadding * 0.065,
+                  height: verticalPadding * 0.07,
                 ),
                 SizedBox(height: verticalPadding * 0.03),
                 commonButton(
                   onNavigate: () async {
-                    UserCredential? userCredential =
-                        await controller.loginMethod(context: context);
+                    UserCredential? userCredential = await controller.loginMethod(context: context);
                     if (userCredential != null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Home()),
-                      );
+                      Get.offAll(() => Home());
                     }
                   },
                   buttonName: "login",
@@ -91,17 +87,12 @@ class _loginpageState extends State<loginpage> {
                 ),
                 SizedBox(height: verticalPadding * 0.04),
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: horizontalPadding * 0.12),
-                  child: Divider(
-                    height: 1,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: horizontalPadding * 0.12),
+                  child: Divider(height: 1,),
                 ),
                 Text(
                   "OR",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
                 SizedBox(height: verticalPadding * 0.04),
                 commonButton(
@@ -118,17 +109,11 @@ class _loginpageState extends State<loginpage> {
                   onTap: () {
                     Get.off(()=> Signup2());
                   },
-                  child: Container(
-                    child: RichText(
-                      text: const TextSpan(
-                        text: "Don't have an account!!",
-                        style: TextStyle(color: Colors.black, fontSize: 15),
-                        children: [
-                          TextSpan(
-                              text: ' SignUp',
-                              style: TextStyle(fontStyle: FontStyle.italic, color: Colors.tealAccent,fontWeight: FontWeight.w500)),
-                        ],
-                      ),
+                  child: RichText(
+                    text: TextSpan(text: "Don't have an account!!",style: Theme.of(context).textTheme.bodySmall,
+                      children: [
+                        TextSpan(text:"  SignUp",  style: Theme.of(context).textTheme.titleMedium,),
+                      ],
                     ),
                   ),
                 )

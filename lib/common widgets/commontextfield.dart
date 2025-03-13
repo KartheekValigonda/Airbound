@@ -9,7 +9,7 @@ Widget commonTextfield({hinttext, obstxt, height, width, controller }){
       obscureText: obstxt,
       decoration: InputDecoration(
         hintText: hinttext,
-        hintStyle: const TextStyle(color: Colors.white),
+        hintStyle: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.normal),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30)
         ),

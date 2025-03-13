@@ -1,0 +1,2 @@
+C:/Disk D/Airbound/android/app/.cxx/Debug/3g1w6a69/x86_64/CMakeFiles/edit_cache.dir
+C:/Disk D/Airbound/android/app/.cxx/Debug/3g1w6a69/x86_64/CMakeFiles/rebuild_cache.dir

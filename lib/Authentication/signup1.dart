@@ -1,18 +1,16 @@
-import 'dart:ui';
 import 'package:airbound/common%20widgets/commonbutton.dart';
 import 'package:airbound/Authentication/signup2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 
 class Signup1 extends StatefulWidget {
   const Signup1({super.key});
 
   @override
-  State<Signup1> createState() => _signup1State();
+  State<Signup1> createState() => _Signup1State();
 }
 
-class _signup1State extends State<Signup1> {
+class _Signup1State extends State<Signup1> {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = MediaQuery.of(context).size.width ;
@@ -20,10 +18,8 @@ class _signup1State extends State<Signup1> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF006A67),
         title: const Text(
           "Welcome to Airbound",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: Padding(
@@ -38,9 +34,9 @@ class _signup1State extends State<Signup1> {
                 children: [
                   SizedBox(height: verticalPadding*0.02,),
                   RichText(
-                    text: const TextSpan(
+                    text: TextSpan(
                       text: 'You can become a ',
-                      style: TextStyle(color: Colors.black, fontSize: 30),
+                      style: Theme.of(context).textTheme.titleLarge,
                       children: [
                         TextSpan(
                             text: 'happy',
@@ -50,14 +46,13 @@ class _signup1State extends State<Signup1> {
                         ),
                         TextSpan(
                           text: ' How?',
-                          style: TextStyle(fontWeight: FontWeight.w500)
                         )
                       ],
                     ),
                   ),
-                  const Text(
+                  Text(
                     "First let's explore your unique challenges and understand your smoking journey. This will help us create a plan that truly fits your needs.",
-                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
