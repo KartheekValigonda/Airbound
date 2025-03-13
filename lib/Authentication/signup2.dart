@@ -1,6 +1,5 @@
 import 'package:airbound/Authentication/loginpage.dart';
 import 'package:airbound/Authentication/verificationScreen.dart';
-import 'package:airbound/Home/home.dart';
 import 'package:airbound/common%20widgets/commonbutton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ import 'dart:math' as math;
 
 
 class Signup2 extends StatefulWidget {
-  Signup2({super.key});
+  const Signup2({super.key});
 
   @override
   State<Signup2> createState() => _Signup2State();
@@ -35,7 +34,7 @@ class _Signup2State extends State<Signup2> {
     final double verticalPadding = MediaQuery.of(context).size.height ;
 
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: double.infinity,
         child: Stack(
           children:[
@@ -60,9 +59,9 @@ class _Signup2State extends State<Signup2> {
                   child: Column(
                     children: [
                       SizedBox(height: verticalPadding*0.02),
-                      const Text(
+                      Text(
                         "Sign Up",
-                        style: TextStyle(fontSize: 40, fontWeight: FontWeight.w400),
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       SizedBox(height: verticalPadding*0.09),
 
@@ -72,7 +71,7 @@ class _Signup2State extends State<Signup2> {
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           hintText: "Email",
-                          hintStyle: const TextStyle(color: Colors.white),
+                          hintStyle: Theme.of(context).textTheme.bodyMedium,
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(color: Colors.white60), // Border color when enabled
@@ -97,7 +96,7 @@ class _Signup2State extends State<Signup2> {
                         obscureText: !isPasswordVisible.value,
                         decoration: InputDecoration(
                           hintText: "Password",
-                          hintStyle: const TextStyle(color: Colors.white),
+                          hintStyle: Theme.of(context).textTheme.bodyMedium,
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(color: Colors.white60), // Border color when enabled
@@ -149,11 +148,7 @@ class _Signup2State extends State<Signup2> {
                         txtclr: Colors.white,
                       ),
                       SizedBox(height:verticalPadding*0.04),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: horizontalPadding*0.12),
-                        child: Divider(height: 1,),
-                      ),
-                      Text("OR", style: TextStyle(fontSize: 18,),),
+                      Text("OR", style: Theme.of(context).textTheme.bodySmall),
                       SizedBox(height: verticalPadding*0.05),
                       commonButton(
                         onNavigate: (){},
@@ -167,7 +162,7 @@ class _Signup2State extends State<Signup2> {
                       InkWell(
                           child: Text("Already have an account! LogIn"),
                         onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=> loginpage()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginPage()));
                         },
 
                       )

@@ -1,17 +1,16 @@
 import 'package:airbound/common%20widgets/commonbutton.dart';
 import 'package:airbound/Authentication/info.dart';
 import 'package:airbound/Authentication/loginpage.dart';
-import 'package:airbound/Authentication/signup1.dart';
 import 'package:flutter/material.dart';
 
-class openingpg extends StatefulWidget {
-  const openingpg({super.key});
+class OpeningPg extends StatefulWidget {
+  const OpeningPg({super.key});
 
   @override
-  State<openingpg> createState() => _openingpgState();
+  State<OpeningPg> createState() => _OpeningPgState();
 }
 
-class _openingpgState extends State<openingpg> {
+class _OpeningPgState extends State<OpeningPg> {
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = MediaQuery.of(context).size.width ;
@@ -42,7 +41,7 @@ class _openingpgState extends State<openingpg> {
                     vertical: verticalPadding*0.01),
                 child: const Text("Welcome to a  healthier life.", textAlign: TextAlign.center,style: TextStyle(fontSize: 36, fontWeight:FontWeight.w500),),
               ),
-              const Text("Start your journey towards freedom from smoking and regain more time and health",textAlign: TextAlign.center,style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
+              Text("Start your journey towards freedom from smoking and regain more time and health",textAlign: TextAlign.center,style: Theme.of(context).textTheme.bodyMedium),
               SizedBox(height: verticalPadding*0.06,),
               commonButton(
                 onNavigate: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>const Info()));},
@@ -53,7 +52,7 @@ class _openingpgState extends State<openingpg> {
               ),
               SizedBox(height: verticalPadding*0.02,),
               commonButton(
-                onNavigate: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>const loginpage()));},
+                onNavigate: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginPage()));},
                 buttonName: "I already have an account",
                 width: horizontalPadding*0.8,
                 height: verticalPadding*0.06,

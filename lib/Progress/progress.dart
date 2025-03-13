@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'package:airbound/common%20widgets/infocard.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+
+import 'chart_widget.dart'; // Adjust path based on your project structure
 
 class Progress extends StatefulWidget {
   @override
@@ -14,10 +18,10 @@ class _ProgressState extends State<Progress> {
   DateTime lastResetDate = DateTime.now();
   DateTime lastSmokeTime = DateTime.now();
 
-  String misspend = "";
-  String cigsmk = "";
-  String life = "";
-  String nic = "";
+  String misspend = "0";
+  String cigsmk = "0";
+  String life = "0";
+  String nic = "0";
   String timeSinceLastSmoke = "0 minutes, 0 hours, 0 days";
 
   Timer? _timer;
@@ -106,27 +110,15 @@ class _ProgressState extends State<Progress> {
     int minutes = duration.inMinutes % 60;
     String result = "";
 
-    // Add days if nonzero.
-    if (days > 0) {
-      result += "$days days";
-    }
-
-    // Add hours if nonzero.
+    if (days > 0) result += "$days days";
     if (hours > 0) {
       if (result.isNotEmpty) result += ", ";
       result += "$hours hours";
     }
-
-    // Always show minutes (or if days and hours are both zero, show minutes).
-    if (result.isNotEmpty) {
-      result += ", ";
-    }
-    result += "$minutes mins";
-
-    result += " ago";
+    if (result.isNotEmpty) result += ", ";
+    result += "$minutes mins ago";
     return result;
   }
-
 
   @override
   void dispose() {
@@ -141,10 +133,11 @@ class _ProgressState extends State<Progress> {
     final screenHeight = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
 
+    int daysSinceReset = DateTime.now().difference(lastResetDate).inDays + 1;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Track and Crack"),
-        centerTitle: true,
+        title: Text("Track and Crack"),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -152,72 +145,66 @@ class _ProgressState extends State<Progress> {
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    "You last smoked: ",
-                    style: TextStyle(fontSize: 15, color: theme.colorScheme.primary),
-                  ),
-                  Text(
-                    timeSinceLastSmoke,
-                    style: TextStyle(fontSize: 15, color: theme.colorScheme.primary),
-                  ),
+                  Text("You last smoked: ", style: theme.textTheme.bodySmall),
+                  Text(timeSinceLastSmoke, style: theme.textTheme.bodySmall),
                 ],
               ),
               SizedBox(height: screenHeight * 0.02),
               Center(
                 child: Container(
                   padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.02, vertical: screenHeight * 0.02),
+                      horizontal: screenWidth * 0.02,
+                      vertical: screenHeight * 0.02),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.secondary,
+                    color: Color(0xFF006A67),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
-                    children:[
+                    children: [
                       Text("Today, You have smoked"),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
                             icon: Icon(Icons.remove_circle,
-                                size: 32, color: theme.iconTheme.color?.withValues()),
+                                size: 26, color: theme.iconTheme.color),
                             onPressed: decrement,
                           ),
                           Text(
                             "$smokedToday",
                             style: TextStyle(
-                              fontSize: 32,
+                              fontSize: 26,
                               fontWeight: FontWeight.bold,
-                              color: Colors.orange,
+                              color: Colors.black,
                             ),
                           ),
                           IconButton(
-                            icon: Icon(Icons.add_circle, size: 32, color: Colors.orange),
+                            icon: Icon(Icons.add_circle,
+                                size: 26, color: Colors.black),
                             onPressed: increment,
                           ),
                         ],
                       ),
-                    ]
+                    ],
                   ),
                 ),
               ),
               SizedBox(height: screenHeight * 0.03),
-              Text(
-                "Since you joined",
-                style: theme.textTheme.headlineSmall?.copyWith(fontSize: 20),
-              ),
+              Text("Since you joined", style: theme.textTheme.bodyMedium),
               SizedBox(height: screenHeight * 0.01),
               Center(
                 child: Container(
                   width: screenWidth * 0.87,
                   height: screenHeight * 0.065,
                   padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.03, vertical: screenHeight * 0.01),
+                      horizontal: screenWidth * 0.03,
+                      vertical: screenHeight * 0.01),
                   decoration: BoxDecoration(
-                    color: theme.cardColor,
+                    color: Theme.of(context).appBarTheme.backgroundColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
@@ -226,14 +213,10 @@ class _ProgressState extends State<Progress> {
                       Expanded(
                         child: Text(
                           "Total cigarette smoked",
-                          style: theme.textTheme.bodyMedium,
+                          style: theme.textTheme.bodySmall,
                         ),
                       ),
-                      Text(
-                        "$cigsmk",
-                        style: theme.textTheme.bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
+                      Text("$cigsmk", style: theme.textTheme.bodySmall),
                     ],
                   ),
                 ),
@@ -242,52 +225,47 @@ class _ProgressState extends State<Progress> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  infoCard("₹$misspend", "Misspend", Icons.attach_money, screenWidth * 0.42),
-                  infoCard("$cigsmk", "cigs smoked", Icons.smoke_free, screenWidth * 0.42),
+                  infoCard("₹$misspend", "Misspend", Icons.attach_money,
+                      screenWidth * 0.42, screenHeight * 0.15),
+                  infoCard("$cigsmk", "cigs smoked", Icons.smoke_free,
+                      screenWidth * 0.42, screenHeight * 0.15),
                 ],
               ),
               SizedBox(height: screenHeight * 0.015),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  infoCard("$life mins", "life reduced", Icons.favorite, screenWidth * 0.42),
+                  infoCard("$life mins", "life reduced", Icons.favorite,
+                      screenWidth * 0.42, screenHeight * 0.15),
                   infoCard("$nic mg", "Nicotine Consumed", Icons.bubble_chart,
-                      screenWidth * 0.42),
+                      screenWidth * 0.42, screenHeight * 0.15),
                 ],
+              ),
+              SizedBox(height: screenHeight * 0.03),
+              Card(
+                child: SizedBox(
+                  height: screenHeight * 0.5,
+                  child: buildChart("Cigarettes Smoked", double.parse(cigsmk),
+                      ChartMetric.cigarettes, daysSinceReset, context),
+                ),
+              ),
+              Card(
+                child: SizedBox(
+                  height: screenHeight * 0.5,
+                  child: buildChart("Money Spent", double.parse(misspend),
+                      ChartMetric.money, daysSinceReset, context),
+                ),
+              ),
+              Card(
+                child: SizedBox(
+                  height: screenHeight * 0.5,
+                  child: buildChart("Nicotine Consumed", double.parse(nic),
+                      ChartMetric.nicotine, daysSinceReset, context),
+                ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-
-  Widget _infoCardSmall(String value, String label, IconData icon) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final theme = Theme.of(context);
-
-    return Container(
-      width: screenWidth * 0.5,
-      height: screenHeight * 0.3,
-      padding: EdgeInsets.symmetric(
-          horizontal: screenWidth * 0.02, vertical: screenHeight * 0.02),
-      decoration: BoxDecoration(
-        color: theme.cardColor.withValues(),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: theme.colorScheme.primary, size: 28),
-          SizedBox(height: 5),
-          Text(
-            value,
-            style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 3),
-          Text(label, style: theme.textTheme.bodyMedium),
-        ],
       ),
     );
   }

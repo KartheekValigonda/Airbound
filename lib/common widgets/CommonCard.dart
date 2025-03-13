@@ -31,7 +31,7 @@ Widget commonCard({
                 child: Text(
                   text,
                   style: const TextStyle(
-                    fontSize: 17,
+                    fontSize: 16,
 
                     color: Colors.black,
                   ),
