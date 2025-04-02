@@ -1,6 +1,7 @@
 import 'package:airbound/Authentication/loginpage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import '../services/firestore_service.dart';
 import 'package:get/get.dart';
 import '../controller/auth_controller.dart';
@@ -117,88 +118,100 @@ class _ProfileState extends State<Profile> {
 
     return Scaffold(
       backgroundColor: const Color(0xFF006A67),
-      body: Column(
+      body: Stack(
         children: [
-          SizedBox(height: screenHeight * 0.12),
-          Center(
-            child: Column(
-              children: [
-                const CircleAvatar(
-                  radius: 70,
-                  backgroundImage: NetworkImage(
-                    "https://i.pravatar.cc/150",
-                  ),
-                ),
-                const SizedBox(height: 10),
-                if (_isLoading)
-                  const CircularProgressIndicator()
-                else
-                  Column(
-                    children: [
-                      Text(
-                        _userName,
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        _userEmail,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.white.withOpacity(0.7),
-                        ),
-                      ),
-                    ],
-                  ),
-              ],
+          ClipPath(
+            clipper: WaveClipperTwo(flip: true),
+            child: Container(
+              height: 400,
+              color: Color(0xFFA0DEFF),
+              child: Center(child: Text("")),
             ),
           ),
-          SizedBox(height: screenHeight * 0.03),
-          // Settings Options
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.055),
-              child: Card(
-                color: theme.cardColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+          Column(
+            children: [
+              SizedBox(height: screenHeight * 0.12),
+              Center(
                 child: Column(
                   children: [
-                    _buildSettingsOption(
-                      Icons.account_balance,
-                      "Account setup",
-                      context,
-                    ),
-                    _buildSettingsOption(
-                      Icons.person,
-                      "Profile setting",
-                      context,
-                    ),
-                    _buildSettingsOption(
-                      Icons.policy,
-                      "Privacy policy",
-                      context,
-                    ),
-                    _buildSettingsOption(
-                      Icons.help_outline,
-                      "Help and support",
-                      context,
-                    ),
-                    Divider(color: theme.dividerColor),
-                    ListTile(
-                      leading: const Icon(Icons.logout, color: Colors.black),
-                      title: const Text(
-                        "Log out",
-                        style: TextStyle(color: Colors.black),
+                    const CircleAvatar(
+                      radius: 70,
+                      backgroundImage: NetworkImage(
+                        "https://i.pravatar.cc/150",
                       ),
-                      onTap: _handleLogout,
                     ),
+                    const SizedBox(height: 10),
+                    if (_isLoading)
+                      const CircularProgressIndicator()
+                    else
+                      Column(
+                        children: [
+                          Text(
+                            _userName,
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            _userEmail,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: Colors.white.withOpacity(0.7),
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
-            ),
+              SizedBox(height: screenHeight * 0.03),
+              // Settings Options
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.055),
+                  child: Card(
+                    color: theme.cardColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      children: [
+                        _buildSettingsOption(
+                          Icons.account_balance,
+                          "Account setup",
+                          context,
+                        ),
+                        _buildSettingsOption(
+                          Icons.person,
+                          "Profile setting",
+                          context,
+                        ),
+                        _buildSettingsOption(
+                          Icons.policy,
+                          "Privacy policy",
+                          context,
+                        ),
+                        _buildSettingsOption(
+                          Icons.help_outline,
+                          "Help and support",
+                          context,
+                        ),
+                        Divider(color: theme.dividerColor),
+                        ListTile(
+                          leading: const Icon(Icons.logout, color: Colors.black),
+                          title: const Text(
+                            "Log out",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onTap: _handleLogout,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

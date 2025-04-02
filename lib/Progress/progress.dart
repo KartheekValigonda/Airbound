@@ -1,13 +1,21 @@
 import 'dart:async';
 import 'package:airbound/common%20widgets/infocard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import '../services/firestore_service.dart';
 import '../controller/auth_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-class Progress extends GetView<AuthController> {
+class Progress extends StatefulWidget {
+  const Progress({super.key});
+
+  @override
+  State<Progress> createState() => _ProgressState();
+}
+
+class _ProgressState extends State<Progress> {
   final _firestoreService = FirestoreService();
   final _todayCigarettes = 0.obs;
   final _isLoading = true.obs;
@@ -26,7 +34,9 @@ class Progress extends GetView<AuthController> {
   Timer? _timer;
   Timer? _lastSmokeTimer;
 
-  Progress({super.key}) {
+  @override
+  void initState() {
+    super.initState();
     _initializeData();
     _startTimers();
   }
@@ -60,7 +70,7 @@ class Progress extends GetView<AuthController> {
 
   Future<void> _loadCostPerCigarette() async {
     try {
-      final user = controller.user.value;
+      final user = Get.find<AuthController>().user.value;
       if (user != null) {
         final userData = await _firestoreService.getUserAdditionalInfo(user.uid);
         _costPerCigarette.value = (userData['costPerCigarette'] as num?)?.toDouble() ?? 0.0;
@@ -88,19 +98,19 @@ class Progress extends GetView<AuthController> {
     });
   }
 
-  void increment() {
-    _smokedToday.value++;
-    _lastSmokeTime.value = DateTime.now();
-    _updateValues();
-    _saveData();
-  }
-
   void _updateValues() {
     int cumulative = _totalCigs.value + _smokedToday.value;
     _misspend.value = (cumulative * _costPerCigarette.value).toStringAsFixed(2);
     _life.value = (cumulative * 11).toString();
     _nic.value = (cumulative * 12).toString();
     _cigsmk.value = cumulative.toString();
+  }
+
+  void increment() {
+    _smokedToday.value++;
+    _lastSmokeTime.value = DateTime.now();
+    _updateValues();
+    _saveData();
   }
 
   String _formattedDuration(Duration duration) {
@@ -214,13 +224,13 @@ class Progress extends GetView<AuthController> {
               );
             }).toList(),
             isCurved: true,
-            color: const Color(0xFF006A67),
+            color: const Color(0xFF7695FF),
             barWidth: 3,
             isStrokeCapRound: true,
             dotData: FlDotData(show: true),
             belowBarData: BarAreaData(
               show: true,
-              color: const Color(0xFF006A67).withOpacity(0.1),
+              color: const Color(0xFF7695FF).withOpacity(0.1),
             ),
           ),
         ],
@@ -231,178 +241,201 @@ class Progress extends GetView<AuthController> {
   }
 
   @override
+  void dispose() {
+    _timer?.cancel();
+    _lastSmokeTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Track and Crack"),
-      ),
-      body: Obx(() => _isLoading.value
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.04,
-                vertical: screenHeight * 0.03,
-              ),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("You last smoked: ", style: theme.textTheme.bodySmall),
-                        Text(_timeSinceLastSmoke.value, style: theme.textTheme.bodySmall),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    Center(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.02,
-                          vertical: screenHeight * 0.02,
+      body: Stack(
+        children:[
+          ClipPath(
+            clipper: WaveClipperTwo(flip: true),
+            child: Container(
+              height: 400,
+              color: Color(0xFFA0DEFF),
+              child: Center(child: Text("")),
+            ),
+          ),
+          Obx(() => _isLoading.value
+            ? const Center(child: CircularProgressIndicator())
+            : Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.04,
+                  vertical: screenHeight * 0.03,
+                ),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      SizedBox(height: screenHeight*0.06),
+                      Text("Progress", style: theme.textTheme.titleLarge),
+                      SizedBox(height: screenHeight*0.02),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("You last smoked: ", style: theme.textTheme.bodySmall),
+                          Text(_timeSinceLastSmoke.value, style: theme.textTheme.bodySmall),
+                        ],
+                      ),
+                      SizedBox(height: screenHeight * 0.02),
+                      Center(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.02,
+                            vertical: screenHeight * 0.02,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF7695FF),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            children: [
+                              const Text("Today, You have smoked"),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "${_smokedToday.value}",
+                                    style: const TextStyle(
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.add_circle,
+                                        size: 26, color: Colors.black),
+                                    onPressed: increment,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
+                      ),
+                      SizedBox(height: screenHeight * 0.03),
+                      Text("Since you joined", style: theme.textTheme.bodyMedium),
+                      SizedBox(height: screenHeight * 0.01),
+                      Center(
+                        child: Container(
+                          width: screenWidth * 0.87,
+                          height: screenHeight * 0.065,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.03,
+                            vertical: screenHeight * 0.01,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Color(0xFF16C47F),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Total cigarette smoked",
+                                  style: theme.textTheme.bodySmall,
+                                ),
+                              ),
+                              Text("${_cigsmk.value}", style: theme.textTheme.bodySmall),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.01),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          infoCard(
+                            "₹${_misspend.value}",
+                            "Misspend",
+                            Icons.attach_money_sharp,
+                            screenWidth * 0.42,
+                            screenHeight * 0.15,
+                            Color(0xFF16C47F),
+                          ),
+                          infoCard(
+                            "${_cigsmk.value}",
+                            "cigs smoked",
+                            Icons.smoke_free,
+                            screenWidth * 0.42,
+                            screenHeight * 0.15,
+                            Color(0xFF7695FF),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: screenHeight * 0.015),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          infoCard(
+                            "${_life.value} mins",
+                            "life reduced",
+                            Icons.favorite,
+                            screenWidth * 0.42,
+                            screenHeight * 0.15,
+                            Color(0xFF8F87F1),
+                          ),
+                          infoCard(
+                            "${_nic.value} mg",
+                            "Nicotine Consumed",
+                            Icons.bubble_chart,
+                            screenWidth * 0.42,
+                            screenHeight * 0.15,
+                            Color(0xFFFF5858),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: screenHeight * 0.03),
+                      Container(
+                        width: screenWidth * 0.87,
+                        padding: EdgeInsets.all(screenWidth * 0.04),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF006A67),
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Today, You have smoked"),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "${_smokedToday.value}",
-                                  style: const TextStyle(
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.add_circle,
-                                      size: 26, color: Colors.black),
-                                  onPressed: increment,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.03),
-                    Text("Since you joined", style: theme.textTheme.bodyMedium),
-                    SizedBox(height: screenHeight * 0.01),
-                    Center(
-                      child: Container(
-                        width: screenWidth * 0.87,
-                        height: screenHeight * 0.065,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.03,
-                          vertical: screenHeight * 0.01,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).appBarTheme.backgroundColor,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Total cigarette smoked",
-                                style: theme.textTheme.bodySmall,
+                            const Text(
+                              "Weekly graph",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF7695FF),
                               ),
                             ),
-                            Text("${_cigsmk.value}", style: theme.textTheme.bodySmall),
+                            SizedBox(height: screenHeight * 0.02),
+                            SizedBox(
+                              height: screenHeight * 0.3,
+                              child: _buildLineChart(),
+                            ),
                           ],
                         ),
                       ),
-                    ),
-                    SizedBox(height: screenHeight * 0.01),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        infoCard(
-                          "₹${_misspend.value}",
-                          "Misspend",
-                          Icons.attach_money_sharp,
-                          screenWidth * 0.42,
-                          screenHeight * 0.15,
-                        ),
-                        infoCard(
-                          "${_cigsmk.value}",
-                          "cigs smoked",
-                          Icons.smoke_free,
-                          screenWidth * 0.42,
-                          screenHeight * 0.15,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.015),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        infoCard(
-                          "${_life.value} mins",
-                          "life reduced",
-                          Icons.favorite,
-                          screenWidth * 0.42,
-                          screenHeight * 0.15,
-                        ),
-                        infoCard(
-                          "${_nic.value} mg",
-                          "Nicotine Consumed",
-                          Icons.bubble_chart,
-                          screenWidth * 0.42,
-                          screenHeight * 0.15,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.03),
-                    Container(
-                      width: screenWidth * 0.87,
-                      padding: EdgeInsets.all(screenWidth * 0.04),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Weekly graph",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF006A67),
-                            ),
-                          ),
-                          SizedBox(height: screenHeight * 0.02),
-                          SizedBox(
-                            height: screenHeight * 0.3,
-                            child: _buildLineChart(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.03),
-                  ],
+                      SizedBox(height: screenHeight * 0.03),
+                    ],
+                  ),
                 ),
-              ),
-            )),
+              )),
+    ]
+      ),
     );
   }
 }

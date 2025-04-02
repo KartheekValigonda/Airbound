@@ -19,10 +19,9 @@ Widget commonCard({
               width: width,
               height: height,
               decoration: BoxDecoration(
-                color: Colors.white60,
                 borderRadius: BorderRadius.circular(22),
                 border: Border.all(
-                  color: Vx.teal200, // Change color as needed
+                  color: Color(0xFF7695FF), // Change color as needed
                   width: 1, // Border thickness
                 ),
               ),
@@ -31,7 +30,7 @@ Widget commonCard({
                 child: Text(
                   text,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
 
                     color: Colors.black,
                   ),
