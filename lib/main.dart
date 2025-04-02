@@ -1,16 +1,26 @@
-import 'package:airbound/Theme/theme.dart';
+import 'package:airbound/Home/home.dart';
 import 'package:airbound/openingpg.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'firebase_options.dart';
+import 'services/background_service.dart';
+import 'Theme/theme.dart';
+import 'controller/auth_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.playIntegrity,
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
   );
+  
+  // Initialize AuthController
+  Get.put(AuthController());
+  
+  // Start background service
+  BackgroundService().startService();
+  
   runApp(const MyApp());
 }
 
@@ -24,7 +34,26 @@ class MyApp extends StatelessWidget {
       title: 'AirBound',
       theme: AppTheme.appTheme(context),
       themeMode: ThemeMode.system,
-      home: OpeningPg(), // Set the splash screen as the initial screen.
+      home: const AuthWrapper(),
+    );
+  }
+}
+
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        // If the snapshot has user data, then they're logged in
+        if (snapshot.hasData) {
+          return const Home();
+        }
+        // Otherwise, they're not logged in
+        return const OpeningPg();
+      },
     );
   }
 }

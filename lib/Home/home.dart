@@ -5,7 +5,7 @@ import 'package:airbound/Home/some_ques.dart';
 import 'package:airbound/Home/whyquit.dart';
 import 'package:airbound/Home/workouts.dart';
 import 'package:airbound/Progress/progress.dart';
-import 'package:airbound/To-Dos/dailytask.dart';
+import 'package:airbound/Recovery/recovery.dart';
 import 'package:airbound/User/profile.dart';
 import 'package:airbound/common%20widgets/commonbutton.dart';
 import 'package:airbound/common%20widgets/commonCard.dart';
@@ -25,7 +25,7 @@ class _HomeState extends State<Home> {
   final List<Widget> _pages = [
     HomeScreen(),
     Progress(),
-    Dailytask(),
+    Recovery(),
     Profile(),
   ];
 
@@ -45,7 +45,7 @@ class _HomeState extends State<Home> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.show_chart), label: "Progress"),
-          BottomNavigationBarItem(icon: Icon(Icons.checklist_rounded), label: "To-Dos"),
+          BottomNavigationBarItem(icon: Icon(Icons.monitor_heart_outlined), label: "Recovery"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),

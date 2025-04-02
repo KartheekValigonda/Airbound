@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:airbound/Authentication/additional_Info.dart';
 import 'package:airbound/Home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
         timer.cancel();
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Home()),
+          MaterialPageRoute(builder: (context) => AdditionalInfo()),
         );
       }
     });

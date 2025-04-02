@@ -1,4 +1,5 @@
 import 'package:airbound/Authentication/signup1.dart';
+import 'package:airbound/Authentication/signup.dart';
 import 'package:flutter/material.dart';
 
 class Info extends StatefulWidget {
@@ -36,17 +37,13 @@ class _OnboardingScreenState extends State<Info> {
         curve: Curves.easeInOut,
       );
     } else {
-      _navigateToLogin();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Signup2()),
+      );
     }
   }
 
-
-  void _navigateToLogin() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const Signup1()),
-    );
-  }
 
   Widget _buildDot(bool isActive) {
     return AnimatedContainer(

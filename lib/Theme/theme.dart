@@ -5,12 +5,12 @@ class AppTheme {
 
     return ThemeData(
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF006A67),
+        backgroundColor: Color(0xFFE8F9FF),
         titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w500,color: Colors.white),
         elevation: 2.0,
         centerTitle: true
       ),
-      scaffoldBackgroundColor: const Color(0xFFFFFAEC),
+      scaffoldBackgroundColor: const Color(0xFFFFFFFF),
       useMaterial3: true,
       textTheme: const TextTheme(
         titleLarge: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),

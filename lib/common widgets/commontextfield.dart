@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 
-Widget commonTextfield({hinttext, obstxt, height, width, controller }){
+Widget commonTextfield({
+  String? hinttext,
+  bool? obstxt,
+  double? height,
+  double? width,
+  TextEditingController? controller,
+  TextInputType? keyboardType,
+  String? Function(String?)? validator
+}) {
   return Container(
-    width: width ,
+    width: width,
     height: height,
-    child: TextField(
+    child: TextFormField(
       controller: controller,
-      obscureText: obstxt,
+      obscureText: obstxt ?? false,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         hintText: hinttext,
         hintStyle: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.normal),
@@ -22,6 +31,7 @@ Widget commonTextfield({hinttext, obstxt, height, width, controller }){
           borderRadius: BorderRadius.circular(30),
         ),
       ),
+      validator: validator,
     ),
   );
 }

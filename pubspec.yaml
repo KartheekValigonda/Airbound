@@ -43,6 +43,7 @@ dependencies:
   firebase_storage:
   cloud_firestore:
   firebase_app_check:
+  flutter_custom_clippers:
   shared_preferences:
   intl:
   fl_chart:
