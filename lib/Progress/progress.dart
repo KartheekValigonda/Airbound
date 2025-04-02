@@ -3,11 +3,19 @@ import 'package:airbound/common%20widgets/infocard.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
+import '../Theme/color_pallet.dart';
 import '../services/firestore_service.dart';
 import '../controller/auth_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-class Progress extends GetView<AuthController> {
+class Progress extends StatefulWidget {
+  const Progress({super.key});
+
+  @override
+  State<Progress> createState() => _ProgressState();
+}
+
+class _ProgressState extends State<Progress> {
   final _firestoreService = FirestoreService();
   final _todayCigarettes = 0.obs;
   final _isLoading = true.obs;
@@ -26,7 +34,9 @@ class Progress extends GetView<AuthController> {
   Timer? _timer;
   Timer? _lastSmokeTimer;
 
-  Progress({super.key}) {
+  @override
+  void initState() {
+    super.initState();
     _initializeData();
     _startTimers();
   }
@@ -60,7 +70,7 @@ class Progress extends GetView<AuthController> {
 
   Future<void> _loadCostPerCigarette() async {
     try {
-      final user = controller.user.value;
+      final user = Get.find<AuthController>().user.value;
       if (user != null) {
         final userData = await _firestoreService.getUserAdditionalInfo(user.uid);
         _costPerCigarette.value = (userData['costPerCigarette'] as num?)?.toDouble() ?? 0.0;
@@ -88,19 +98,41 @@ class Progress extends GetView<AuthController> {
     });
   }
 
-  void increment() {
-    _smokedToday.value++;
-    _lastSmokeTime.value = DateTime.now();
-    _updateValues();
-    _saveData();
-  }
-
   void _updateValues() {
     int cumulative = _totalCigs.value + _smokedToday.value;
     _misspend.value = (cumulative * _costPerCigarette.value).toStringAsFixed(2);
     _life.value = (cumulative * 11).toString();
     _nic.value = (cumulative * 12).toString();
     _cigsmk.value = cumulative.toString();
+  }
+
+  void increment() async {
+    try {
+      final user = Get.find<AuthController>().user.value;
+      if (user != null) {
+        // Update local state
+        _smokedToday.value++;
+        _lastSmokeTime.value = DateTime.now();
+        
+        // Update Firestore
+        await _firestoreService.updateTodayCigaretteCount(_smokedToday.value);
+        
+        // Update local values and save to SharedPreferences
+        _updateValues();
+        _saveData();
+        
+        // Refresh weekly data to update the graph
+        await _loadWeeklyData();
+      }
+    } catch (e) {
+      print('Error updating cigarette count: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to update cigarette count',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 
   String _formattedDuration(Duration duration) {
@@ -145,6 +177,7 @@ class Progress extends GetView<AuthController> {
   }
 
   Widget _buildLineChart() {
+    // If no data, create empty data for the last 7 days
     if (_weeklyData.isEmpty) {
       final now = DateTime.now();
       _weeklyData.value = List.generate(7, (index) {
@@ -155,6 +188,10 @@ class Progress extends GetView<AuthController> {
         };
       });
     }
+
+    // Get the maximum count for Y-axis scaling
+    final maxCount = _weeklyData.isEmpty ? 10 : 
+        _weeklyData.map((d) => d['count'] as int).reduce((a, b) => a > b ? a : b);
 
     return LineChart(
       LineChartData(
@@ -214,20 +251,27 @@ class Progress extends GetView<AuthController> {
               );
             }).toList(),
             isCurved: true,
-            color: const Color(0xFF006A67),
+            color: Pallete.smallCard,
             barWidth: 3,
             isStrokeCapRound: true,
             dotData: FlDotData(show: true),
             belowBarData: BarAreaData(
               show: true,
-              color: const Color(0xFF006A67).withOpacity(0.1),
+              color: Pallete.smallCard.withOpacity(0.3),
             ),
           ),
         ],
         minY: 0,
-        maxY: _weeklyData.isEmpty ? 10 : _weeklyData.map((d) => d['count'] as int).reduce((a, b) => a > b ? a : b) + 2,
+        maxY: maxCount + 2, // Add some padding to the max value
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _lastSmokeTimer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -237,172 +281,193 @@ class Progress extends GetView<AuthController> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Track and Crack"),
-      ),
-      body: Obx(() => _isLoading.value
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.04,
-                vertical: screenHeight * 0.03,
+      body: Stack(
+        children:[
+          ClipPath(
+            child: Container(
+              height: screenHeight*0.28,
+              child: Center(child: Text("")),
+              decoration: BoxDecoration(
+                  gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2]),
+                  borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                )
               ),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("You last smoked: ", style: theme.textTheme.bodySmall),
-                        Text(_timeSinceLastSmoke.value, style: theme.textTheme.bodySmall),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    Center(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.02,
-                          vertical: screenHeight * 0.02,
+            ),
+          ),
+          Obx(() => _isLoading.value
+            ? const Center(child: CircularProgressIndicator())
+            : Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.04,
+                  vertical: screenHeight * 0.03,
+                ),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      SizedBox(height: screenHeight * 0.12),
+                      Text("Progress", style: theme.textTheme.titleLarge?.copyWith(color: Colors.white)),
+                      SizedBox(height: screenHeight * 0.02),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("You last smoked: ", style: theme.textTheme.bodySmall),
+                          Text(_timeSinceLastSmoke.value, style: theme.textTheme.bodySmall),
+                        ],
+                      ),
+                      SizedBox(height: screenHeight * 0.02),
+                      Center(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.02,
+                            vertical: screenHeight * 0.02,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Pallete.bigCard,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            children: [
+                              const Text("Today, You have smoked"),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "${_smokedToday.value}",
+                                    style: const TextStyle(
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.add_circle,
+                                        size: 26, color: Colors.black),
+                                    onPressed: increment,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
+                      ),
+                      SizedBox(height: screenHeight * 0.03),
+                      Text("Since you joined", style: theme.textTheme.bodyMedium),
+                      SizedBox(height: screenHeight * 0.01),
+                      Center(
+                        child: Container(
+                          width: screenWidth * 0.87,
+                          height: screenHeight * 0.065,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.03,
+                            vertical: screenHeight * 0.01,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Pallete.smallCard,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Total cigarette smoked",
+                                  style: theme.textTheme.bodySmall,
+                                ),
+                              ),
+                              Text("${_cigsmk.value}", style: theme.textTheme.bodySmall),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.01),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          infoCard(
+                            "₹${_misspend.value}",
+                            "Misspend",
+                            Icons.attach_money_sharp,
+                            screenWidth * 0.42,
+                            screenHeight * 0.15,
+                            Pallete.smallCard,
+                          ),
+                          infoCard(
+                            "${_cigsmk.value}",
+                            "cigs smoked",
+                            Icons.smoke_free,
+                            screenWidth * 0.42,
+                            screenHeight * 0.15,
+                            Pallete.smallCard,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: screenHeight * 0.015),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          infoCard(
+                            "${_life.value} mins",
+                            "life reduced",
+                            Icons.favorite,
+                            screenWidth * 0.42,
+                            screenHeight * 0.15,
+                            Pallete.smallCard,
+                          ),
+                          infoCard(
+                            "${_nic.value} mg",
+                            "Nicotine Consumed",
+                            Icons.bubble_chart,
+                            screenWidth * 0.42,
+                            screenHeight * 0.15,
+                            Pallete.smallCard,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: screenHeight * 0.03),
+                      Container(
+                        width: screenWidth * 0.87,
+                        padding: EdgeInsets.all(screenWidth * 0.04),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF006A67),
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Today, You have smoked"),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "${_smokedToday.value}",
-                                  style: const TextStyle(
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.add_circle,
-                                      size: 26, color: Colors.black),
-                                  onPressed: increment,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.03),
-                    Text("Since you joined", style: theme.textTheme.bodyMedium),
-                    SizedBox(height: screenHeight * 0.01),
-                    Center(
-                      child: Container(
-                        width: screenWidth * 0.87,
-                        height: screenHeight * 0.065,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.03,
-                          vertical: screenHeight * 0.01,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).appBarTheme.backgroundColor,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Total cigarette smoked",
-                                style: theme.textTheme.bodySmall,
+                            const Text(
+                              "Weekly graph",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Pallete.smallCard,
                               ),
                             ),
-                            Text("${_cigsmk.value}", style: theme.textTheme.bodySmall),
+                            SizedBox(height: screenHeight * 0.02),
+                            SizedBox(
+                              height: screenHeight * 0.3,
+                              child: _buildLineChart(),
+                            ),
                           ],
                         ),
                       ),
-                    ),
-                    SizedBox(height: screenHeight * 0.01),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        infoCard(
-                          "₹${_misspend.value}",
-                          "Misspend",
-                          Icons.attach_money_sharp,
-                          screenWidth * 0.42,
-                          screenHeight * 0.15,
-                        ),
-                        infoCard(
-                          "${_cigsmk.value}",
-                          "cigs smoked",
-                          Icons.smoke_free,
-                          screenWidth * 0.42,
-                          screenHeight * 0.15,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.015),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        infoCard(
-                          "${_life.value} mins",
-                          "life reduced",
-                          Icons.favorite,
-                          screenWidth * 0.42,
-                          screenHeight * 0.15,
-                        ),
-                        infoCard(
-                          "${_nic.value} mg",
-                          "Nicotine Consumed",
-                          Icons.bubble_chart,
-                          screenWidth * 0.42,
-                          screenHeight * 0.15,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.03),
-                    Container(
-                      width: screenWidth * 0.87,
-                      padding: EdgeInsets.all(screenWidth * 0.04),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Weekly graph",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF006A67),
-                            ),
-                          ),
-                          SizedBox(height: screenHeight * 0.02),
-                          SizedBox(
-                            height: screenHeight * 0.3,
-                            child: _buildLineChart(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.03),
-                  ],
+                      SizedBox(height: screenHeight * 0.03),
+                    ],
+                  ),
                 ),
-              ),
-            )),
+              )),
+    ]
+      ),
     );
   }
 }

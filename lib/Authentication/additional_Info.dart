@@ -1,10 +1,11 @@
 import 'dart:math' as math;
 import 'package:airbound/Home/home.dart';
+import 'package:airbound/Theme/color_pallet.dart';
 import 'package:airbound/common%20widgets/commontextfield.dart';
+import 'package:airbound/services/firestore_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controller/auth_controller.dart';
-import '../services/firestore_service.dart';
 
 class AdditionalInfo extends StatefulWidget {
   const AdditionalInfo({super.key});
@@ -19,37 +20,26 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
   final _costController = TextEditingController();
   final _firestoreService = FirestoreService();
   final _isLoading = false.obs;
-  final AuthController _authController = Get.find<AuthController>(); // Access controller via Get.find
-
-  @override
-  void dispose() {
-    _cigarettesController.dispose();
-    _costController.dispose();
-    super.dispose();
-  }
 
   Future<void> _saveAndNavigate() async {
     if (!_formKey.currentState!.validate()) return;
 
-    _isLoading.value = true;
-
     try {
-      final user = _authController.user.value;
-      if (user != null) {
-        await _firestoreService.updateUserAdditionalInfo(
-          userId: user.uid,
-          cigarettesPerDay: int.parse(_cigarettesController.text),
-          costPerCigarette: double.parse(_costController.text),
-        );
+      _isLoading.value = true;
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId == null) throw Exception('User not authenticated');
 
-        Get.snackbar(
-          'Success',
-          'Information saved successfully',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+      await _firestoreService.updateUserAdditionalInfo(
+        userId: userId,
+        cigarettesPerDay: int.parse(_cigarettesController.text),
+        costPerCigarette: double.parse(_costController.text),
+      );
 
-        Get.offAll(() => const Home());
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Home()),
+        );
       }
     } catch (e) {
       print('Error saving additional info: $e');
@@ -65,28 +55,41 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
   }
 
   @override
+  void dispose() {
+    _cigarettesController.dispose();
+    _costController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final theme = Theme.of(context);
 
     return Scaffold(
-      body: SizedBox(
-        height: double.infinity,
+      body: SafeArea(
         child: Stack(
           children: [
+            // Background gradient
             Positioned(
-              top: screenHeight * 0.25,
-              right: screenWidth * 0.1,
-              child: Transform.rotate(
-                angle: 45 * math.pi / 180,
-                child: Container(
-                  width: screenWidth * 2,
-                  height: screenWidth * 2.1,
-                  color: const Color(0xFF006A67),
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: screenHeight * 0.28,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(colors: [Pallete.gradient1, Pallete.gradient2]),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(50),
+                    bottomRight: Radius.circular(50),
+                  ),
                 ),
               ),
             ),
+            // Main content
             SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: screenWidth * 0.05,
@@ -97,76 +100,97 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: screenHeight * 0.2),
+                      SizedBox(height: screenHeight * 0.02),
                       Text(
                         "Let's get to know you better",
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: theme.textTheme.titleLarge?.copyWith(color: Colors.white),
                       ),
                       SizedBox(height: screenHeight * 0.02),
                       Text(
                         "This information will help us track your progress better",
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white),
                       ),
                       SizedBox(height: screenHeight * 0.05),
-                      commonTextfield(
-                        controller: _cigarettesController,
-                        hinttext: "Cigarettes Per Day",
-                        keyboardType: TextInputType.number,
-                        width: screenWidth * 0.8,
-                        height: 60,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter number of cigarettes';
-                          }
-                          final number = int.tryParse(value);
-                          if (number == null || number <= 0) {
-                            return 'Please enter a valid number';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: screenHeight * 0.03),
-                      commonTextfield(
-                        controller: _costController,
-                        hinttext: "Cost Per Cigarette (₹)",
-                        keyboardType: TextInputType.number,
-                        width: screenWidth * 0.8,
-                        height: 60,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter cost per cigarette';
-                          }
-                          final number = double.tryParse(value);
-                          if (number == null || number <= 0) {
-                            return 'Please enter a valid amount';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: screenHeight * 0.05),
-                      Obx(() => SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: _isLoading.value ? null : _saveAndNavigate,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: const Color(0xFF006A67),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25),
+                      Container(
+                        padding: EdgeInsets.all(screenWidth * 0.04),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
                             ),
-                          ),
-                          child: _isLoading.value
-                              ? const CircularProgressIndicator()
-                              : const Text(
-                            "Let's dive in!",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          ],
                         ),
-                      )),
+                        child: Column(
+                          children: [
+                            commonTextfield(
+                              controller: _cigarettesController,
+                              hinttext: "Cigarettes Per Day",
+                              keyboardType: TextInputType.number,
+                              width: screenWidth * 0.8,
+                              height: 60,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter number of cigarettes';
+                                }
+                                final number = int.tryParse(value);
+                                if (number == null || number <= 0) {
+                                  return 'Please enter a valid number';
+                                }
+                                return null;
+                              },
+                              context: context,
+                            ),
+                            SizedBox(height: screenHeight * 0.03),
+                            commonTextfield(
+                              controller: _costController,
+                              hinttext: "Cost Per Cigarette (₹)",
+                              keyboardType: TextInputType.number,
+                              width: screenWidth * 0.8,
+                              height: 60,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter cost per cigarette';
+                                }
+                                final number = double.tryParse(value);
+                                if (number == null || number <= 0) {
+                                  return 'Please enter a valid amount';
+                                }
+                                return null;
+                              },
+                              context: context,
+                            ),
+                            SizedBox(height: screenHeight * 0.05),
+                            SizedBox(
+                              width: double.infinity,
+                              height: screenHeight * 0.06,
+                              child: ElevatedButton(
+                                onPressed: _isLoading.value ? null : _saveAndNavigate,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Pallete.bigCard,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: Obx(() => _isLoading.value
+                                  ? const CircularProgressIndicator()
+                                  : Text(
+                                    "Let's dive in!",
+                                    style: TextStyle(
+                                      fontSize: screenWidth * 0.04,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

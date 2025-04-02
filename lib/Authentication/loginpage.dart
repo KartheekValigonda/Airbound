@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:airbound/common%20widgets/commonbutton.dart';
 import 'package:airbound/common%20widgets/commontextfield.dart';
 import 'package:airbound/Home/home.dart';
+import '../Theme/color_pallet.dart';
 import '../controller/auth_controller.dart';
 
 class LoginPage extends StatefulWidget {
@@ -39,7 +40,9 @@ class _LoginPageState extends State<LoginPage> {
               child: Container(
                 width: horizontalPadding * 2, // Adjust size as needed
                 height: horizontalPadding * 2.1,
-                color: const Color(0xFF006A67), // Green container (hex code)
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2]),
+                ),
               ),
             ),
           ),
@@ -60,6 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                   obstxt: false,
                   width: horizontalPadding * 0.85,
                   height: verticalPadding * 0.07,
+                  context: context,
                 ),
                 SizedBox(
                   height: verticalPadding * 0.015,
@@ -70,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                   obstxt: true,
                   width: horizontalPadding * 0.85,
                   height: verticalPadding * 0.07,
+                  context: context,
                 ),
                 SizedBox(height: verticalPadding * 0.03),
                 commonButton(
@@ -82,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                   buttonName: "login",
                   width: horizontalPadding * 0.85,
                   height: verticalPadding * 0.07,
-                  clr: Color(0xFF006A67),
+                  clr: Pallete.progress2,
                   txtclr: Colors.white,
                 ),
                 SizedBox(height: verticalPadding * 0.04),

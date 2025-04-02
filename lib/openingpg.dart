@@ -1,3 +1,4 @@
+import 'package:airbound/Theme/color_pallet.dart';
 import 'package:airbound/common%20widgets/commonbutton.dart';
 import 'package:airbound/Authentication/info.dart';
 import 'package:airbound/Authentication/loginpage.dart';
@@ -48,7 +49,7 @@ class _OpeningPgState extends State<OpeningPg> {
                 buttonName: "Let's get started!",
                 width: horizontalPadding*0.8,
                 height: verticalPadding*0.06,
-                  clr: Color(0xFF006A67)
+                  clr: Pallete.bigCard
               ),
               SizedBox(height: verticalPadding*0.02,),
               commonButton(

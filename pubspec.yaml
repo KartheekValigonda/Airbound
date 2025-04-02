@@ -44,6 +44,8 @@ dependencies:
   cloud_firestore:
   firebase_app_check:
   flutter_custom_clippers:
+  image_picker:
+  supabase_flutter:
   shared_preferences:
   intl:
   fl_chart:

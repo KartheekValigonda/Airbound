@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../Theme/color_pallet.dart';
+
 class Workouts extends StatelessWidget {
   Workouts({super.key});
 
@@ -74,7 +76,7 @@ class Workouts extends StatelessWidget {
       name: 'Deep Breathing & Meditation',
       icon: Icons.air_outlined,
       instructions:
-      'Routine: Practice diaphragmatic breathing or meditation for 5–10 minutes, especially during moments of craving.\nBenefits: Helps control the stress response and promotes relaxation. Techniques such as “4-7-8 breathing” (inhale for 4 seconds, hold for 7 seconds, exhale for 8 seconds) can be very effective.',
+      'Routine: Practice diaphragmatic breathing or meditation for 5–10 minutes, especially during moments of craving.\nBenefits: Helps control the stress response and promotes relaxation. Techniques such as "4-7-8 breathing" (inhale for 4 seconds, hold for 7 seconds, exhale for 8 seconds) can be very effective.',
     ),
   ];
 
@@ -85,72 +87,96 @@ class Workouts extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Exercises to Help Quit Smoking'),
-      ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: screenWidth*0.032, vertical: screenHeight*0.02),
-          child: Column(
-            children: [
-              SizedBox(height: screenHeight * 0.03),
-              Text(
-                "Cardiovascular Exercises",
-                style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
+      body: Stack(
+        children: [
+          ClipPath(
+            child: Container(
+              height: screenHeight*0.28,
+              child: Center(child: Text("")),
+              decoration: BoxDecoration(
+                  gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2]),
+                  borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                )
               ),
-              SizedBox(height: screenHeight * 0.01),
-              Container(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: cardioVascular.length,
-                  itemBuilder: (context, index) {
-                    return exerciseCard(
-                        exercise: cardioVascular[index], context: context);
-                  },
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.03),
-              Text(
-                "Strength Training & Bodyweight Exercises",
-                style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: screenHeight * 0.01),
-              Container(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: strengthTraining.length,
-                  itemBuilder: (context, index) {
-                    return exerciseCard(
-                        exercise: strengthTraining[index], context: context);
-                  },
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.03),
-              Text(
-                "Flexibility, Breathing, and Mindfulness Exercises",
-                style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: screenHeight * 0.01),
-              Container(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: mindfulnessExercises.length,
-                  itemBuilder: (context, index) {
-                    return exerciseCard(
-                        exercise: mindfulnessExercises[index], context: context);
-                  },
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth*0.032, vertical: screenHeight*0.02),
+              child: Column(
+                children: [
+                  SizedBox(height: screenHeight * 0.12),
+                  Text(
+                    "Exercises to Help Quit Smoking",
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.06,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: screenHeight * 0.03),
+                  Text(
+                    "Cardiovascular Exercises",
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: screenHeight * 0.01),
+                  Container(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: cardioVascular.length,
+                      itemBuilder: (context, index) {
+                        return exerciseCard(
+                            exercise: cardioVascular[index], context: context);
+                      },
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.03),
+                  Text(
+                    "Strength Training & Bodyweight Exercises",
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: screenHeight * 0.01),
+                  Container(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: strengthTraining.length,
+                      itemBuilder: (context, index) {
+                        return exerciseCard(
+                            exercise: strengthTraining[index], context: context);
+                      },
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.03),
+                  Text(
+                    "Flexibility, Breathing, and Mindfulness Exercises",
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: screenHeight * 0.01),
+                  Container(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: mindfulnessExercises.length,
+                      itemBuilder: (context, index) {
+                        return exerciseCard(
+                            exercise: mindfulnessExercises[index], context: context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

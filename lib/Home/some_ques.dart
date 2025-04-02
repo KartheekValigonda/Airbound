@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../Theme/color_pallet.dart';
+
 class SomeQues extends StatelessWidget {
   const SomeQues({super.key});
 
   final List<Map<String, String>> qaList = const [
     {
       'question': 'Why did I start smoking in the first place?',
-      'answer':
-      'Many start due to stress, peer pressure, or curiosity. Recognizing this helps me see it’s not a need but a habit I can break.',
+      'answer':"Many start due to stress, peer pressure, or curiosity. Recognizing this helps me see it's not a need but a habit I can break.",
       'imageUrl': 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80',
     },
     {
@@ -18,17 +19,17 @@ class SomeQues extends StatelessWidget {
     },
     {
       'question': 'What will I gain financially by quitting?',
-      'answer': 'A pack-a-day habit costs hundreds yearly. That’s money for vacations, hobbies, or savings instead of smoke.',
-      'imageUrl': 'https://images.unsplash.com/photo-1556740714-5d4e4f07f7e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80', // New: Money saving
+      'answer': "A pack-a-day habit costs hundreds yearly. That's money for vacations, hobbies, or savings instead of smoke.",
+      'imageUrl': "https://images.unsplash.com/photo-1556740714-5d4e4f07f7e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80", // New: Money saving
     },
     {
     'question': 'How will my relationships improve?',
-    'answer': 'No more smoky smell or health worries for loved ones. I’ll feel more present and connected.',
+    'answer': "No more smoky smell or health worries for loved ones. I'll feel more present and connected.",
     'imageUrl': 'https://images.unsplash.com/photo-1529336953128-a85760f58cb5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80', // Original (still works)
     },
     {
       'question': 'What about withdrawal symptoms?',
-      'answer': 'They’re temporary—cravings peak in days and fade in weeks. I’ll feel stronger each day I push through.',
+      'answer': "They're temporary—cravings peak in days and fade in weeks. I'll feel stronger each day I push through.",
       'imageUrl': 'https://images.unsplash.com/photo-1597854658468-596b5a6e6e32?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80', // New: Strength and resilience
     },
     {
@@ -43,8 +44,8 @@ class SomeQues extends StatelessWidget {
     },
     {
       'question': 'How will my senses improve?',
-      'answer': 'Taste and smell dull with smoking. Quitting brings back flavors and scents I’ve missed—like fresh coffee or flowers.',
-      'imageUrl': 'https://images.unsplash.com/photo-1517248135467-2c0b8b15d9c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80', // New: Coffee and senses
+      'answer': "Taste and smell dull with smoking. Quitting brings back flavors and scents I've missed—like fresh coffee or flowers.",
+      'imageUrl': "https://images.unsplash.com/photo-1517248135467-2c0b8b15d9c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80", // New: Coffee and senses
     },
     {
       'question': 'Why is now the right time to quit?',
@@ -61,67 +62,88 @@ class SomeQues extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Quit Smoking Q&A',
-          style: TextStyle(fontSize: screenWidth * 0.06), // Dynamic font size
-        ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(screenWidth * 0.04), // Dynamic padding
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header Image
-            Container(
-              width: double.infinity,
-              height: screenHeight * 0.25, // 25% of screen height
+      body: Stack(
+        children: [
+          ClipPath(
+            child: Container(
+              height: screenHeight*0.28,
+              child: Center(child: Text("")),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                image: const DecorationImage(
-                  image: NetworkImage(
-                    'https://images.unsplash.com/photo-1505455184862-554165e5f6ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80',
+                  gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2]),
+                  borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                )
+              ),
+            ),
+          ),
+          SingleChildScrollView(
+            padding: EdgeInsets.all(screenWidth * 0.04),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: screenHeight * 0.12),
+                Text(
+                  'Quit Smoking Q&A',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.06,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
-                  fit: BoxFit.cover,
+                  textAlign: TextAlign.center,
                 ),
-              ),
+                SizedBox(height: screenHeight * 0.02),
+                // Header Image
+                Container(
+                  width: double.infinity,
+                  height: screenHeight * 0.25,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                    image: const DecorationImage(
+                      image: NetworkImage(
+                        'https://images.unsplash.com/photo-1505455184862-554165e5f6ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80',
+                      ),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+
+                // Title
+                Text(
+                  'Key Questions About Quitting Smoking',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.08, // Dynamic font size
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.015),
+
+                // Introduction Text
+                Text(
+                  "Here are some vital questions I've asked myself about quitting smoking—and the answers that keep me motivated!",
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.045, // Dynamic font size
+                    color: Colors.black87,
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.025),
+
+                // Q&A Expansion Tiles
+                ...qaList.map((qa) => _buildQuestionTile(
+                  context,
+                  question: qa['question']!,
+                  answer: qa['answer']!,
+                  imageUrl: qa['imageUrl']!,
+                  screenWidth: screenWidth,
+                  screenHeight: screenHeight,
+                )).toList(),
+
+                SizedBox(height: screenHeight * 0.025),
+              ],
             ),
-            SizedBox(height: screenHeight * 0.02),
-
-            // Title
-            Text(
-              'Key Questions About Quitting Smoking',
-              style: TextStyle(
-                fontSize: screenWidth * 0.08, // Dynamic font size
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.015),
-
-            // Introduction Text
-            Text(
-              'Here are some vital questions I’ve asked myself about quitting smoking—and the answers that keep me motivated!',
-              style: TextStyle(
-                fontSize: screenWidth * 0.045, // Dynamic font size
-                color: Colors.black87,
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.025),
-
-            // Q&A Expansion Tiles
-            ...qaList.map((qa) => _buildQuestionTile(
-              context,
-              question: qa['question']!,
-              answer: qa['answer']!,
-              imageUrl: qa['imageUrl']!,
-              screenWidth: screenWidth,
-              screenHeight: screenHeight,
-            )).toList(),
-
-            SizedBox(height: screenHeight * 0.025),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter/material.dart';
 import '../services/firestore_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthController extends GetxController {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirestoreService _firestoreService = FirestoreService();
-  final Rx<User?> user = Rx<User?>(null);
+  final _firestoreService = FirestoreService();
+  final user = Rxn<firebase_auth.User>();
+  final isLoading = false.obs;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
@@ -16,7 +18,7 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    user.bindStream(_auth.authStateChanges());
+    user.bindStream(firebase_auth.FirebaseAuth.instance.authStateChanges());
   }
 
   //login method
@@ -24,7 +26,7 @@ class AuthController extends GetxController {
     UserCredential? userCredential;
 
     try {
-      userCredential = await _auth.signInWithEmailAndPassword(
+      userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passController.text);
     } on FirebaseAuthException catch (e) {
       Get.snackbar("Login Error", e.message ?? "Something went wrong",
@@ -39,7 +41,7 @@ class AuthController extends GetxController {
     UserCredential? userCredential;
 
     try {
-      userCredential = await _auth.createUserWithEmailAndPassword(
+      userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email, password: password);
       await storeUserData(name: name, email: email, password: password);
     } on FirebaseAuthException catch (e) {
@@ -74,33 +76,58 @@ class AuthController extends GetxController {
     required String name,
   }) async {
     try {
-      // Create user account
-      final userCredential = await _auth.createUserWithEmailAndPassword(
+      isLoading.value = true;
+
+      // Create user in Firebase Auth
+      final userCredential = await firebase_auth.FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Store user data in Firestore
-      await _firestoreService.createUserDocument(
-        name: name,
-        email: email,
-      );
+      if (userCredential.user != null) {
+        // Update display name in Firebase Auth
+        await userCredential.user!.updateDisplayName(name);
 
-      Get.snackbar(
-        'Success',
-        'Account created successfully',
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
+        // Create user document in Firestore
+        await _firestoreService.createUserDocument(
+          uid: userCredential.user!.uid,
+          name: name,
+          email: email,
+        );
+
+        // Create user in Supabase
+        final supabase = Supabase.instance.client;
+        await supabase.auth.signUp(
+          email: email,
+          password: password,
+          data: {
+            'name': name,
+            'firebase_uid': userCredential.user!.uid,
+          },
+        );
+
+        // Send email verification
+        await userCredential.user!.sendEmailVerification();
+
+        Get.snackbar(
+          'Success',
+          'Account created successfully. Please verify your email.',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      }
     } catch (e) {
       print('Error during signup: $e');
       Get.snackbar(
         'Error',
-        'Failed to create account',
+        'Failed to create account. Please try again.',
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
       rethrow;
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -109,31 +136,53 @@ class AuthController extends GetxController {
     required String password,
   }) async {
     try {
-      await _auth.signInWithEmailAndPassword(
+      isLoading.value = true;
+      
+      // Sign in to Firebase
+      final userCredential = await firebase_auth.FirebaseAuth.instance
+          .signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      Get.snackbar(
-        'Success',
-        'Logged in successfully',
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
+
+      if (userCredential.user != null) {
+        // Sign in to Supabase
+        final supabase = Supabase.instance.client;
+        await supabase.auth.signInWithPassword(
+          email: email,
+          password: password,
+        );
+
+        Get.snackbar(
+          'Success',
+          'Logged in successfully',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      }
     } catch (e) {
       print('Error during signin: $e');
       Get.snackbar(
         'Error',
-        'Failed to sign in',
+        'Failed to login. Please try again.',
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
       rethrow;
+    } finally {
+      isLoading.value = false;
     }
   }
 
   Future<void> signOut() async {
     try {
-      await _auth.signOut();
+      // Sign out from Firebase
+      await firebase_auth.FirebaseAuth.instance.signOut();
+      
+      // Sign out from Supabase
+      final supabase = Supabase.instance.client;
+      await supabase.auth.signOut();
+
       Get.snackbar(
         'Success',
         'Logged out successfully',
@@ -144,17 +193,24 @@ class AuthController extends GetxController {
       print('Error during signout: $e');
       Get.snackbar(
         'Error',
-        'Failed to sign out',
+        'Failed to logout. Please try again.',
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
-      rethrow;
     }
   }
 
   Future<void> resetPassword(String email) async {
     try {
-      await _auth.sendPasswordResetEmail(email: email);
+      // Send reset email from Firebase
+      await firebase_auth.FirebaseAuth.instance.sendPasswordResetEmail(
+        email: email,
+      );
+
+      // Send reset email from Supabase
+      final supabase = Supabase.instance.client;
+      await supabase.auth.resetPasswordForEmail(email);
+
       Get.snackbar(
         'Success',
         'Password reset email sent',

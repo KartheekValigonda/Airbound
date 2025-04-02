@@ -1,5 +1,5 @@
-import 'package:airbound/Authentication/signup1.dart';
 import 'package:airbound/Authentication/signup.dart';
+import 'package:airbound/Theme/color_pallet.dart';
 import 'package:flutter/material.dart';
 
 class Info extends StatefulWidget {
@@ -52,7 +52,7 @@ class _OnboardingScreenState extends State<Info> {
       height: 8,
       width: isActive ? 16 : 8,
       decoration: BoxDecoration(
-        color: isActive ? Colors.teal : Colors.grey,
+        color: isActive ? Pallete.progress2 : Pallete.progress1,
         borderRadius: BorderRadius.circular(4),
       ),
     );
@@ -102,7 +102,7 @@ class _OnboardingScreenState extends State<Info> {
                             style: TextStyle(
                               fontSize: isTablet ? 28 : 24,
                               fontWeight: FontWeight.bold,
-                              color: isLastPage ? Theme.of(context).scaffoldBackgroundColor : Color(0xFF006A67),
+                              color: isLastPage ? Pallete.progress1 : Pallete.progress2,
                             ),
                           ),
                           SizedBox(height: screenHeight * 0.02),
@@ -115,7 +115,7 @@ class _OnboardingScreenState extends State<Info> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: isTablet ? 16 : 14,
-                                color: isLastPage ? Colors.grey[300] : Colors.teal,
+                                color: isLastPage ? Pallete.progress1 : Pallete.progress2,
                               ),
                             ),
                           ),
@@ -142,8 +142,8 @@ class _OnboardingScreenState extends State<Info> {
                     onPressed: _onNextPressed,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _currentPage == _pages.length - 1
-                          ? Theme.of(context).scaffoldBackgroundColor
-                          : Color(0xFF006A67),
+                          ? Pallete.progress1
+                          : Pallete.progress2,
                       padding: EdgeInsets.symmetric(
                         horizontal: isTablet ? 60 : 90,
                         vertical: isTablet ? 18 : 14,

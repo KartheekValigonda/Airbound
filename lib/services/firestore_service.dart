@@ -7,38 +7,20 @@ class FirestoreService {
 
   // Create a new user document in Firestore
   Future<void> createUserDocument({
+    required String uid,
     required String name,
     required String email,
   }) async {
     try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        print('Creating user document for user ID: ${user.uid}');
-        // Check if document already exists
-        final docRef = _firestore.collection('user').doc(user.uid);
-        final doc = await docRef.get();
-        
-        if (!doc.exists) {
-          print('Document does not exist, creating new document...');
-          await docRef.set({
-            'name': name,
-            'email': email,
-            'uid': user.uid,
-            'createdAt': FieldValue.serverTimestamp(),
-            'lastUpdated': FieldValue.serverTimestamp(),
-          });
-
-          // Initialize daily cigarette data
-          await _initializeDailyCigaretteData(user.uid);
-          
-          print('User document created successfully for ${user.uid}');
-        } else {
-          print('User document already exists for ${user.uid}');
-        }
-      } else {
-        print('No authenticated user found');
-        throw Exception('No authenticated user found');
-      }
+      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'name': name,
+        'email': email,
+        'createdAt': FieldValue.serverTimestamp(),
+        'lastUpdated': FieldValue.serverTimestamp(),
+        'cigarettesPerDay': 0,
+        'costPerCigarette': 0.0,
+        'totalCigarettesSmoked': {},
+      });
     } catch (e) {
       print('Error creating user document: $e');
       rethrow;
@@ -79,23 +61,13 @@ class FirestoreService {
         final dateKey = '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
         print('Getting cigarette count for date: $dateKey');
         
-        final docRef = _firestore
-            .collection('user')
-            .doc(user.uid)
-            .collection('total_cigarette_smoked')
-            .doc(dateKey);
-        
-        final doc = await docRef.get();
-
+        final doc = await _firestore.collection('users').doc(user.uid).get();
         if (doc.exists) {
-          final count = doc.data()?['count'] ?? 0;
-          print('Found existing count: $count');
-          return count;
-        } else {
-          print('No document found for today, initializing...');
-          await _initializeDailyCigaretteData(user.uid);
-          return 0;
+          final data = doc.data();
+          final totalCigarettesSmoked = data?['totalCigarettesSmoked'] as Map<String, dynamic>?;
+          return totalCigarettesSmoked?[dateKey]?['count'] ?? 0;
         }
+        return 0;
       }
       print('No authenticated user found');
       return 0;
@@ -114,15 +86,12 @@ class FirestoreService {
         final dateKey = '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
         print('Updating cigarette count to $count for date: $dateKey');
         
-        final docRef = _firestore
-            .collection('user')
-            .doc(user.uid)
-            .collection('total_cigarette_smoked')
-            .doc(dateKey);
-        
-        await docRef.set({
-          'count': count,
-          'date': Timestamp.fromDate(today),
+        await _firestore.collection('users').doc(user.uid).update({
+          'totalCigarettesSmoked.$dateKey': {
+            'count': count,
+            'date': Timestamp.fromDate(today),
+            'lastUpdated': FieldValue.serverTimestamp(),
+          },
           'lastUpdated': FieldValue.serverTimestamp(),
         });
         print('Cigarette count updated successfully');
@@ -173,7 +142,7 @@ class FirestoreService {
       final user = _auth.currentUser;
       if (user != null) {
         print('Getting user data for user ID: ${user.uid}');
-        final doc = await _firestore.collection('user').doc(user.uid).get();
+        final doc = await _firestore.collection('users').doc(user.uid).get();
         if (doc.exists) {
           print('User data retrieved successfully');
           return doc.data();
@@ -195,15 +164,16 @@ class FirestoreService {
   Future<void> updateUserData({
     required String name,
     required String email,
+    String? profileUrl,
   }) async {
     try {
       final user = _auth.currentUser;
       if (user != null) {
         print('Updating user data for user ID: ${user.uid}');
-        final docRef = _firestore.collection('user').doc(user.uid);
-        await docRef.update({
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
           'name': name,
           'email': email,
+          if (profileUrl != null) 'profileUrl': profileUrl,
           'lastUpdated': FieldValue.serverTimestamp(),
         });
         print('User data updated successfully');
@@ -217,7 +187,6 @@ class FirestoreService {
     }
   }
 
-
   // Get cigarette data for the last 7 days
   Future<List<Map<String, dynamic>>> getLastWeekCigaretteData() async {
     try {
@@ -227,36 +196,28 @@ class FirestoreService {
         return [];
       }
 
-      final now = DateTime.now();
-      final List<Map<String, dynamic>> data = [];
+      final doc = await _firestore.collection('users').doc(user.uid).get();
+      if (!doc.exists) return [];
 
-      // Get data for the last 7 days
+      final data = doc.data();
+      final totalCigarettesSmoked = data?['totalCigarettesSmoked'] as Map<String, dynamic>?;
+      if (totalCigarettesSmoked == null) return [];
+
+      final now = DateTime.now();
+      final List<Map<String, dynamic>> result = [];
+
       for (int i = 6; i >= 0; i--) {
         final date = DateTime(now.year, now.month, now.day - i);
         final dateKey = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
         
-        final doc = await _firestore
-            .collection('user')
-            .doc(user.uid)
-            .collection('total_cigarette_smoked')
-            .doc(dateKey)
-            .get();
-
-        if (doc.exists) {
-          data.add({
-            'date': date,
-            'count': doc.data()?['count'] ?? 0,
-          });
-        } else {
-          data.add({
-            'date': date,
-            'count': 0,
-          });
-        }
+        final dayData = totalCigarettesSmoked[dateKey];
+        result.add({
+          'date': date,
+          'count': dayData?['count'] ?? 0,
+        });
       }
 
-      print('Retrieved last week data: $data');
-      return data;
+      return result;
     } catch (e) {
       print('Error getting last week cigarette data: $e');
       return [];
@@ -311,7 +272,6 @@ class FirestoreService {
     }
   }
 
-
   // Update user additional information
   Future<void> updateUserAdditionalInfo({
     required String userId,
@@ -319,11 +279,12 @@ class FirestoreService {
     required double costPerCigarette,
   }) async {
     try {
-      await _firestore.collection('user').doc(userId).update({
+      await _firestore.collection('users').doc(userId).update({
         'cigarettesPerDay': cigarettesPerDay.toDouble(),
         'costPerCigarette': costPerCigarette,
-        'updatedAt': FieldValue.serverTimestamp(),
+        'lastUpdated': FieldValue.serverTimestamp(),
       });
+      print('Successfully updated user additional info for user: $userId');
     } catch (e) {
       print('Error updating user additional info: $e');
       rethrow;
@@ -332,7 +293,7 @@ class FirestoreService {
 
   Future<Map<String, dynamic>> getUserAdditionalInfo(String userId) async {
     try {
-      final doc = await _firestore.collection('user').doc(userId).get();
+      final doc = await _firestore.collection('users').doc(userId).get();
       if (doc.exists) {
         return {
           'cigarettesPerDay': doc.data()?['cigarettesPerDay'] ?? 0.0,

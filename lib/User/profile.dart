@@ -1,6 +1,8 @@
 import 'package:airbound/Authentication/loginpage.dart';
+import 'package:airbound/User/update_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../Theme/color_pallet.dart';
 import '../services/firestore_service.dart';
 import 'package:get/get.dart';
 import '../controller/auth_controller.dart';
@@ -116,89 +118,97 @@ class _ProfileState extends State<Profile> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF006A67),
-      body: Column(
+      body: Stack(
         children: [
-          SizedBox(height: screenHeight * 0.12),
-          Center(
-            child: Column(
-              children: [
-                const CircleAvatar(
-                  radius: 70,
-                  backgroundImage: NetworkImage(
-                    "https://i.pravatar.cc/150",
-                  ),
-                ),
-                const SizedBox(height: 10),
-                if (_isLoading)
-                  const CircularProgressIndicator()
-                else
-                  Column(
-                    children: [
-                      Text(
-                        _userName,
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        _userEmail,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.white.withOpacity(0.7),
-                        ),
-                      ),
-                    ],
-                  ),
-              ],
+          ClipPath(
+            child: Container(
+              height: screenHeight*0.35,
+              child: Center(child: Text("")),
+              decoration: BoxDecoration(
+                  gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2]),
+                  borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                )
+              ),
             ),
           ),
-          SizedBox(height: screenHeight * 0.03),
-          // Settings Options
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.055),
-              child: Card(
-                color: theme.cardColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+          Column(
+            children: [
+              SizedBox(height: screenHeight * 0.12),
+              Center(
                 child: Column(
                   children: [
-                    _buildSettingsOption(
-                      Icons.account_balance,
-                      "Account setup",
-                      context,
-                    ),
-                    _buildSettingsOption(
-                      Icons.person,
-                      "Profile setting",
-                      context,
-                    ),
-                    _buildSettingsOption(
-                      Icons.policy,
-                      "Privacy policy",
-                      context,
-                    ),
-                    _buildSettingsOption(
-                      Icons.help_outline,
-                      "Help and support",
-                      context,
-                    ),
-                    Divider(color: theme.dividerColor),
-                    ListTile(
-                      leading: const Icon(Icons.logout, color: Colors.black),
-                      title: const Text(
-                        "Log out",
-                        style: TextStyle(color: Colors.black),
+                    const CircleAvatar(
+                      radius: 70,
+                      backgroundImage: NetworkImage(
+                        "https://i.pravatar.cc/150",
                       ),
-                      onTap: _handleLogout,
                     ),
+                    const SizedBox(height: 10),
+                    if (_isLoading)
+                      const CircularProgressIndicator()
+                    else
+                      Column(
+                        children: [
+                          Text(
+                            _userName,
+                            style: theme.textTheme.bodyLarge
+                          ),
+                          Text(
+                            _userEmail,
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
-            ),
+              SizedBox(height: screenHeight * 0.03),
+              // Settings Options
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.055),
+                  child: Card(
+                    color: Pallete.bigCard,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      children: [
+                        _buildSettingsOption(
+                          Icons.account_balance,
+                          "Account setup",
+                              (){Navigator.push(context, MaterialPageRoute(builder: (context)=> UpdateProfile()));},
+                          context,
+                        ),
+                        _buildSettingsOption(
+                          Icons.policy,
+                          "Privacy policy",
+                              (){Navigator.push(context, MaterialPageRoute(builder: (context)=> Placeholder()));},
+                          context,
+                        ),
+                        _buildSettingsOption(
+                          Icons.help_outline,
+                          "Help and support",
+                              (){Navigator.push(context, MaterialPageRoute(builder: (context)=> Placeholder()));},
+                          context,
+                        ),
+                        Divider(color: theme.dividerColor),
+                        ListTile(
+                          leading: const Icon(Icons.logout, color: Colors.black),
+                          title: const Text(
+                            "Log out",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onTap: _handleLogout,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -206,22 +216,18 @@ class _ProfileState extends State<Profile> {
   }
 
   // Widget for Settings Options
-  Widget _buildSettingsOption(
-    IconData icon,
-    String title,
-    BuildContext context,
-  ) {
+  Widget _buildSettingsOption(IconData icon, String title, ontap, BuildContext context,) {
     final theme = Theme.of(context);
 
     return ListTile(
-      leading: Icon(icon, color: theme.colorScheme.primary),
+      leading: Icon(icon, color: Pallete.progress2),
       title: Text(title, style: theme.textTheme.bodyLarge),
       trailing: Icon(
         Icons.arrow_forward_ios,
         size: 16,
-        color: theme.iconTheme.color?.withOpacity(0.7),
+        color: Pallete.progress2,
       ),
-      onTap: () {},
+      onTap: ontap,
     );
   }
 }

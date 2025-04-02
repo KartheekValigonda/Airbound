@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget infoCard(String value, String label, IconData icon, double width, double height) {
+Widget infoCard(String value, String label, IconData icon, double width, double height, bgcolor) {
   return Builder(
     builder: (context) {
       final theme = Theme.of(context);
@@ -9,7 +9,7 @@ Widget infoCard(String value, String label, IconData icon, double width, double 
         height: height,
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
-          color: Theme.of(context).appBarTheme.backgroundColor, // Background from theme
+          color: bgcolor, // Background from theme
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(

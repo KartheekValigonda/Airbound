@@ -4,6 +4,7 @@ import 'package:airbound/common%20widgets/commonbutton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../Theme/color_pallet.dart';
 import '../controller/auth_controller.dart';
 import '../services/firestore_service.dart';
 import 'dart:math' as math;
@@ -48,7 +49,9 @@ class _Signup2State extends State<Signup2> {
                 child: Container(
                   width: horizontalPadding * 2,
                   height: horizontalPadding * 2.1,
-                  color: const Color(0xFF006A67),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2]),
+                  ),
                 ),
               ),
             ),
@@ -69,12 +72,12 @@ class _Signup2State extends State<Signup2> {
                         ),
                         SizedBox(height: verticalPadding * 0.09),
 
-                        /// **Name Field**
                         TextFormField(
                           controller: nameController,
+                          style: Theme.of(context).textTheme.bodySmall,
                           decoration: InputDecoration(
                             hintText: "Full Name",
-                            hintStyle: Theme.of(context).textTheme.bodyMedium,
+                            hintStyle: Theme.of(context).textTheme.bodySmall,
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30)),
                             enabledBorder: OutlineInputBorder(
@@ -98,10 +101,11 @@ class _Signup2State extends State<Signup2> {
                         /// **Email Field**
                         TextFormField(
                           controller: emailController,
+                          style: Theme.of(context).textTheme.bodySmall,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             hintText: "Email",
-                            hintStyle: Theme.of(context).textTheme.bodyMedium,
+                            hintStyle: Theme.of(context).textTheme.bodySmall,
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30)),
                             enabledBorder: OutlineInputBorder(
@@ -127,10 +131,11 @@ class _Signup2State extends State<Signup2> {
                         /// **Password Field**
                         Obx(() => TextFormField(
                               controller: passController,
-                              obscureText: !isPasswordVisible.value,
+                          style: Theme.of(context).textTheme.bodySmall,
+                          obscureText: !isPasswordVisible.value,
                               decoration: InputDecoration(
                                 hintText: "Password",
-                                hintStyle: Theme.of(context).textTheme.bodyMedium,
+                                hintStyle: Theme.of(context).textTheme.bodySmall,
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30)),
                                 enabledBorder: OutlineInputBorder(
@@ -148,7 +153,7 @@ class _Signup2State extends State<Signup2> {
                                       ? Icons.visibility
                                       : Icons.visibility_off),
                                   onPressed: () => isPasswordVisible.toggle(),
-                                  color: Colors.teal,
+                                  color: Pallete.progress2,
                                 ),
                               ),
                               validator: (value) {
@@ -187,6 +192,7 @@ class _Signup2State extends State<Signup2> {
                                 if (userCredential.user != null) {
                                   // Store user data in Firestore
                                   await _firestoreService.createUserDocument(
+                                    uid: userCredential.user!.uid,
                                     name: nameController.text.trim(),
                                     email: emailController.text.trim(),
                                   );
@@ -259,7 +265,7 @@ class _Signup2State extends State<Signup2> {
                           buttonName: "Sign Up",
                           width: horizontalPadding * 0.9,
                           height: verticalPadding * 0.07,
-                          clr: Color(0xFF006A67),
+                          clr: Pallete.progress2,
                           txtclr: Colors.white,
                         ),
                         SizedBox(height: verticalPadding * 0.04),
