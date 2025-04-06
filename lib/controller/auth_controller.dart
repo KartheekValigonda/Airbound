@@ -5,7 +5,9 @@ import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter/material.dart';
 import '../services/firestore_service.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:typed_data';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 class AuthController extends GetxController {
   final _firestoreService = FirestoreService();
@@ -86,25 +88,16 @@ class AuthController extends GetxController {
       );
 
       if (userCredential.user != null) {
+        final String uid = userCredential.user!.uid;
+        
         // Update display name in Firebase Auth
         await userCredential.user!.updateDisplayName(name);
 
         // Create user document in Firestore
         await _firestoreService.createUserDocument(
-          uid: userCredential.user!.uid,
+          uid: uid,
           name: name,
           email: email,
-        );
-
-        // Create user in Supabase
-        final supabase = Supabase.instance.client;
-        await supabase.auth.signUp(
-          email: email,
-          password: password,
-          data: {
-            'name': name,
-            'firebase_uid': userCredential.user!.uid,
-          },
         );
 
         // Send email verification
@@ -146,13 +139,6 @@ class AuthController extends GetxController {
       );
 
       if (userCredential.user != null) {
-        // Sign in to Supabase
-        final supabase = Supabase.instance.client;
-        await supabase.auth.signInWithPassword(
-          email: email,
-          password: password,
-        );
-
         Get.snackbar(
           'Success',
           'Logged in successfully',
@@ -178,10 +164,6 @@ class AuthController extends GetxController {
     try {
       // Sign out from Firebase
       await firebase_auth.FirebaseAuth.instance.signOut();
-      
-      // Sign out from Supabase
-      final supabase = Supabase.instance.client;
-      await supabase.auth.signOut();
 
       Get.snackbar(
         'Success',
@@ -206,10 +188,6 @@ class AuthController extends GetxController {
       await firebase_auth.FirebaseAuth.instance.sendPasswordResetEmail(
         email: email,
       );
-
-      // Send reset email from Supabase
-      final supabase = Supabase.instance.client;
-      await supabase.auth.resetPasswordForEmail(email);
 
       Get.snackbar(
         'Success',

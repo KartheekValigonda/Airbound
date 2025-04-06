@@ -18,7 +18,7 @@ class _ProfileState extends State<Profile> {
   final FirestoreService _firestoreService = FirestoreService();
   final AuthController _authController = Get.find<AuthController>();
   String _userName = "Loading...";
-  String _userEmail = "";
+  String? _profilePicUrl;
   bool _isLoading = true;
 
   @override
@@ -34,7 +34,6 @@ class _ProfileState extends State<Profile> {
         print("No authenticated user found");
         setState(() {
           _userName = "Not logged in";
-          _userEmail = "";
           _isLoading = false;
         });
         return;
@@ -44,14 +43,13 @@ class _ProfileState extends State<Profile> {
       if (userData != null) {
         setState(() {
           _userName = userData['name'] ?? "User";
-          _userEmail = userData['email'] ?? user.email ?? "";
+          _profilePicUrl = userData['profile_pic'];
           _isLoading = false;
         });
       } else {
         print("No user data found in Firestore");
         setState(() {
           _userName = user.displayName ?? "User";
-          _userEmail = user.email ?? "";
           _isLoading = false;
         });
       }
@@ -59,7 +57,6 @@ class _ProfileState extends State<Profile> {
       print('Error loading user data: $e');
       setState(() {
         _userName = "Error loading data";
-        _userEmail = FirebaseAuth.instance.currentUser?.email ?? "";
         _isLoading = false;
       });
       Get.snackbar(
@@ -139,11 +136,15 @@ class _ProfileState extends State<Profile> {
               Center(
                 child: Column(
                   children: [
-                    const CircleAvatar(
+                    CircleAvatar(
                       radius: 70,
-                      backgroundImage: NetworkImage(
-                        "https://i.pravatar.cc/150",
-                      ),
+                      backgroundColor: Colors.grey[200],
+                      backgroundImage: _profilePicUrl != null
+                          ? NetworkImage(_profilePicUrl!)
+                          : null,
+                      child: _profilePicUrl == null
+                          ? const Icon(Icons.person, size: 70, color: Colors.grey)
+                          : null,
                     ),
                     const SizedBox(height: 10),
                     if (_isLoading)
@@ -154,10 +155,6 @@ class _ProfileState extends State<Profile> {
                           Text(
                             _userName,
                             style: theme.textTheme.bodyLarge
-                          ),
-                          Text(
-                            _userEmail,
-                            style: theme.textTheme.bodyMedium,
                           ),
                         ],
                       ),

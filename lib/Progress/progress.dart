@@ -310,7 +310,7 @@ class _ProgressState extends State<Progress> {
                       SizedBox(height: screenHeight * 0.12),
                       Text("Progress", style: theme.textTheme.titleLarge?.copyWith(color: Colors.white)),
                       SizedBox(height: screenHeight * 0.02),
-                      Row(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text("You last smoked: ", style: theme.textTheme.bodySmall),

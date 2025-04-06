@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'firebase_options.dart';
 import 'services/background_service.dart';
 import 'Theme/theme.dart';
@@ -16,16 +15,6 @@ void main() async {
   // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  );
-  
-  // Initialize Supabase
-  await Supabase.initialize(
-    url: 'https://xtlnddkgrzacjkusxghb.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0bG5kZGtncnphY2prdXN4Z2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2ODQ4MTUsImV4cCI6MjA1OTI2MDgxNX0.srYzjiazq1F9wUWFYo6IwL-gfUL-HShRqIsG3DlYTWo',
-    authOptions: const FlutterAuthClientOptions(
-      authFlowType: AuthFlowType.pkce,
-      autoRefreshToken: true,
-    ),
   );
   
   // Initialize AuthController
@@ -60,11 +49,14 @@ class AuthWrapper extends StatelessWidget {
     return StreamBuilder<firebase_auth.User?>(
       stream: firebase_auth.FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        // If the snapshot has user data, then they're logged in
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        
         if (snapshot.hasData) {
           return const Home();
         }
-        // Otherwise, they're not logged in
+        
         return const OpeningPg();
       },
     );

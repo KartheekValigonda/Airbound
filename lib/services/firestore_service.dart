@@ -20,6 +20,7 @@ class FirestoreService {
         'cigarettesPerDay': 0,
         'costPerCigarette': 0.0,
         'totalCigarettesSmoked': {},
+        'profilePhotosUrl': null,
       });
     } catch (e) {
       print('Error creating user document: $e');
