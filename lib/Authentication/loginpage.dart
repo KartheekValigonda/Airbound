@@ -38,113 +38,91 @@ class _LoginPageState extends State<LoginPage> {
             begin: Alignment.bottomLeft,
           ),
         ),
-        child: Stack(
-          children: [
-            // Decorative Rotated Container
-            Positioned(
-              top: verticalPadding * 0.4,
-              right: horizontalPadding * 0.01,
-              child: Transform.rotate(
-                angle: 45 * math.pi / 180,
-                child: Container(
-                  width: horizontalPadding * 2,
-                  height: horizontalPadding * 2.1,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Pallete.gradient1, Pallete.gradient2],
-                    ),
-                  ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: verticalPadding * 0.18),
+              Text(
+                "Login",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              SizedBox(height: verticalPadding * 0.08),
+              commonTextfield(
+                controller: controller.emailController,
+                hinttext: "Email",
+                obstxt: false,
+                width: horizontalPadding * 0.85,
+                height: verticalPadding * 0.07,
+                context: context,
+              ),
+              SizedBox(height: verticalPadding * 0.015),
+              commonTextfield(
+                controller: controller.passController,
+                hinttext: "Password",
+                obstxt: true,
+                width: horizontalPadding * 0.85,
+                height: verticalPadding * 0.07,
+                context: context,
+              ),
+              SizedBox(height: verticalPadding * 0.03),
+              commonButton(
+                onNavigate: () async {
+                  UserCredential? userCredential =
+                      await controller.loginMethod(context: context);
+                  if (userCredential != null) {
+                    Get.offAll(() => const Home());
+                  }
+                },
+                buttonName: "Login",
+                width: horizontalPadding * 0.85,
+                height: verticalPadding * 0.07,
+                clr: Pallete.authButton,
+                txtclr: Colors.white,
+              ),
+              SizedBox(height: verticalPadding * 0.04),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding * 0.12),
+                child: Divider(
+                  height: 1,
+                  color: Pallete.authButton,
                 ),
               ),
-            ),
-            // Login Form
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(height: verticalPadding * 0.18),
-                  Text(
-                    "Login",
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  SizedBox(height: verticalPadding * 0.08),
-                  commonTextfield(
-                    controller: controller.emailController,
-                    hinttext: "Email",
-                    obstxt: false,
-                    width: horizontalPadding * 0.85,
-                    height: verticalPadding * 0.07,
-                    context: context,
-                  ),
-                  SizedBox(height: verticalPadding * 0.015),
-                  commonTextfield(
-                    controller: controller.passController,
-                    hinttext: "Password",
-                    obstxt: true,
-                    width: horizontalPadding * 0.85,
-                    height: verticalPadding * 0.07,
-                    context: context,
-                  ),
-                  SizedBox(height: verticalPadding * 0.03),
-                  commonButton(
-                    onNavigate: () async {
-                      UserCredential? userCredential =
-                          await controller.loginMethod(context: context);
-                      if (userCredential != null) {
-                        Get.offAll(() => const Home());
-                      }
-                    },
-                    buttonName: "Login",
-                    width: horizontalPadding * 0.85,
-                    height: verticalPadding * 0.07,
-                    clr: Pallete.authButton,
-                    txtclr: Colors.white,
-                  ),
-                  SizedBox(height: verticalPadding * 0.04),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: horizontalPadding * 0.12),
-                    child: Divider(
-                      height: 1,
-                      color: Pallete.authButton,
-                    ),
-                  ),
-                  Text(
-                    "OR",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  SizedBox(height: verticalPadding * 0.04),
-                  commonButton(
-                    onNavigate: () {
-                      // Google Sign-in logic here
-                    },
-                    buttonName: "Continue with Google",
-                    width: horizontalPadding * 0.85,
-                    height: verticalPadding * 0.07,
-                    clr: Colors.white,
-                    txtclr: Colors.black,
-                  ),
-                  SizedBox(height: verticalPadding * 0.04),
-                  GestureDetector(
-                    onTap: () {
-                      Get.off(() => const Signup2());
-                    },
-                    child: RichText(
-                      text: TextSpan(
-                        text: "Don't have an account!!",
-                        style: Theme.of(context).textTheme.bodySmall,
-                        children: [
-                          TextSpan(
-                            text: "  SignUp",
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
+              Text(
+                "OR",
+                style: Theme.of(context).textTheme.bodySmall,
               ),
-            ),
-          ],
+              SizedBox(height: verticalPadding * 0.04),
+              commonButton(
+                onNavigate: () {
+                  // Google Sign-in logic here
+                },
+                buttonName: "Continue with Google",
+                width: horizontalPadding * 0.85,
+                height: verticalPadding * 0.07,
+                clr: Colors.white,
+                txtclr: Colors.black,
+              ),
+              SizedBox(height: verticalPadding * 0.04),
+              GestureDetector(
+                onTap: () {
+                  Get.off(() => const Signup2());
+                },
+                child: RichText(
+                  text: TextSpan(
+                    text: "Don't have an account!!",
+                    style: Theme.of(context).textTheme.bodySmall,
+                    children: [
+                      TextSpan(
+                        text: "  SignUp",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -85,98 +85,84 @@ class Workouts extends StatelessWidget {
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final theme = Theme.of(context);
 
     return Scaffold(
-      body: Stack(
-        children: [
-          ClipPath(
-            child: Container(
-              height: screenHeight*0.28,
-              child: Center(child: Text("")),
-              decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2]),
-                  borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50),
-                  bottomRight: Radius.circular(50),
-                )
-              ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2],
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,),
+        ),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth*0.032, vertical: screenHeight*0.02),
+            child: Column(
+              children: [
+                SizedBox(height: screenHeight * 0.12),
+                Text(
+                  "Exercises to Help Quit Smoking",
+                  style: theme.textTheme.titleLarge
+                ),
+                SizedBox(height: screenHeight * 0.03),
+                Text(
+                  "Cardiovascular Exercises",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: screenHeight * 0.01),
+                Container(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: cardioVascular.length,
+                    itemBuilder: (context, index) {
+                      return exerciseCard(
+                          exercise: cardioVascular[index], context: context);
+                    },
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.03),
+                Text(
+                  "Strength Training & Bodyweight Exercises",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: screenHeight * 0.01),
+                Container(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: strengthTraining.length,
+                    itemBuilder: (context, index) {
+                      return exerciseCard(
+                          exercise: strengthTraining[index], context: context);
+                    },
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.03),
+                Text(
+                  "Flexibility, Breathing, and Mindfulness Exercises",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: screenHeight * 0.01),
+                Container(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: mindfulnessExercises.length,
+                    itemBuilder: (context, index) {
+                      return exerciseCard(
+                          exercise: mindfulnessExercises[index], context: context);
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
-          SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth*0.032, vertical: screenHeight*0.02),
-              child: Column(
-                children: [
-                  SizedBox(height: screenHeight * 0.12),
-                  Text(
-                    "Exercises to Help Quit Smoking",
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.06,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: screenHeight * 0.03),
-                  Text(
-                    "Cardiovascular Exercises",
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: screenHeight * 0.01),
-                  Container(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: cardioVascular.length,
-                      itemBuilder: (context, index) {
-                        return exerciseCard(
-                            exercise: cardioVascular[index], context: context);
-                      },
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.03),
-                  Text(
-                    "Strength Training & Bodyweight Exercises",
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: screenHeight * 0.01),
-                  Container(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: strengthTraining.length,
-                      itemBuilder: (context, index) {
-                        return exerciseCard(
-                            exercise: strengthTraining[index], context: context);
-                      },
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.03),
-                  Text(
-                    "Flexibility, Breathing, and Mindfulness Exercises",
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: screenHeight * 0.01),
-                  Container(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: mindfulnessExercises.length,
-                      itemBuilder: (context, index) {
-                        return exerciseCard(
-                            exercise: mindfulnessExercises[index], context: context);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -197,22 +183,21 @@ class Workouts extends StatelessWidget {
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final theme = Theme.of(context);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth*0.02, vertical: screenHeight*0.001),
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         child: ExpansionTile(
           leading: Icon(
             exercise.icon,
-            size: 30,
-            color: Colors.teal,
+            size: 25,
+            color: Pallete.authButton,
           ),
           title: Text(
             exercise.name,
-            style: TextStyle(
-              fontSize: 17,
-            ),
+              style: theme.textTheme.bodySmall
           ),
           children: [
             Padding(

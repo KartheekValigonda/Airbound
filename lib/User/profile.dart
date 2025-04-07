@@ -194,10 +194,10 @@ class _ProfileState extends State<Profile> {
                         ),
                         Divider(color: theme.dividerColor),
                         ListTile(
-                          leading: const Icon(Icons.logout, color: Colors.black),
-                          title: const Text(
+                          leading: const Icon(Icons.logout, color: Pallete.authButton),
+                          title: Text(
                             "Log out",
-                            style: TextStyle(color: Colors.black),
+                              style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           onTap: _handleLogout,
                         ),
@@ -218,12 +218,12 @@ class _ProfileState extends State<Profile> {
     final theme = Theme.of(context);
 
     return ListTile(
-      leading: Icon(icon, color: Pallete.progress2),
-      title: Text(title, style: theme.textTheme.bodyLarge),
+      leading: Icon(icon, color: Pallete.authButton),
+      title: Text(title, style: theme.textTheme.bodyMedium),
       trailing: Icon(
         Icons.arrow_forward_ios,
         size: 16,
-        color: Pallete.progress2,
+        color: Pallete.authButton,
       ),
       onTap: ontap,
     );

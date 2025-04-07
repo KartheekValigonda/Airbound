@@ -251,13 +251,13 @@ class _ProgressState extends State<Progress> {
               );
             }).toList(),
             isCurved: true,
-            color: Pallete.smallCard,
+            color: Pallete.authButton,
             barWidth: 3,
             isStrokeCapRound: true,
             dotData: FlDotData(show: true),
             belowBarData: BarAreaData(
               show: true,
-              color: Pallete.smallCard.withOpacity(0.3),
+              color: Pallete.authButton.withOpacity(0.3),
             ),
           ),
         ],
@@ -442,7 +442,7 @@ class _ProgressState extends State<Progress> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Pallete.smallCard,
+                              color: Pallete.authButton,
                             ),
                           ),
                           SizedBox(height: screenHeight * 0.02),
