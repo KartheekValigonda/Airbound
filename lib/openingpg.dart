@@ -16,7 +16,9 @@ class _OpeningPgState extends State<OpeningPg> {
   Widget build(BuildContext context) {
     final horizontalPadding = MediaQuery.of(context).size.width;
     final verticalPadding = MediaQuery.of(context).size.height;
+
     return Scaffold(
+      backgroundColor: Pallete.backgroundColor,
       body: SizedBox(
         height: double.infinity,
         child: Stack(
@@ -24,8 +26,8 @@ class _OpeningPgState extends State<OpeningPg> {
             // Container with gradient background
             Center(
               child: Container(
-                height: verticalPadding*0.6,
-                width: horizontalPadding*0.9,
+                height: verticalPadding * 0.6,
+                width: horizontalPadding * 0.9,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Pallete.gradient1, Pallete.gradient2],
@@ -36,42 +38,54 @@ class _OpeningPgState extends State<OpeningPg> {
                 ),
                 child: Column(
                   children: [
-                    SizedBox(height: verticalPadding*0.1),
+                    SizedBox(height: verticalPadding * 0.1),
                     const Text(
                       "Welcome to a healthier life.",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    Text(
-                      "Start your journey towards freedom from smoking and regain more time and health",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodySmall
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Text(
+                        "Start your journey towards freedom from smoking and regain more time and health",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                     ),
-                    SizedBox(height: verticalPadding*0.06),
+                    SizedBox(height: verticalPadding * 0.06),
                     commonButton(
                       onNavigate: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const Info()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Info()),
+                        );
                       },
                       buttonName: "Let's get started!",
-                      width: horizontalPadding*0.8,
-                      height: verticalPadding*0.06,
-                      clr: Pallete.bigCard
+                      width: horizontalPadding * 0.8,
+                      height: verticalPadding * 0.06,
+                      clr: Pallete.authButton,
                     ),
-                    SizedBox(height: verticalPadding*0.02),
+                    SizedBox(height: verticalPadding * 0.02),
                     commonButton(
                       onNavigate: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
+                        );
                       },
                       buttonName: "I already have an account",
-                      width: horizontalPadding*0.8,
-                      height: verticalPadding*0.06,
-                      txtclr: Colors.black
+                      width: horizontalPadding * 0.8,
+                      height: verticalPadding * 0.06,
+                      txtclr: Colors.black,
                     ),
                   ],
                 ),
               ),
             ),
-            
+
             // Logo positioned above the container
             Positioned(
               top: verticalPadding * 0.12,

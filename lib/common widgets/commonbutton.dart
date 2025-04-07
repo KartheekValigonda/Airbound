@@ -1,3 +1,4 @@
+import 'package:airbound/Theme/color_pallet.dart';
 import 'package:flutter/material.dart';
 
 Widget commonButton({onNavigate,buttonName, width, height, clr, txtclr}){
@@ -8,7 +9,7 @@ Widget commonButton({onNavigate,buttonName, width, height, clr, txtclr}){
       foregroundColor: Colors.white70, // Text color
       shape: RoundedRectangleBorder(
         side: const BorderSide(
-            color: Colors.white
+            color: Pallete.authButton
         ),
         borderRadius: BorderRadius.circular(35),
       ),

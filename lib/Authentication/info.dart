@@ -52,7 +52,7 @@ class _OnboardingScreenState extends State<Info> {
       height: 8,
       width: isActive ? 16 : 8,
       decoration: BoxDecoration(
-        color: isActive ? Pallete.progress2 : Pallete.progress1,
+        color: isActive ? Pallete.authButton : Colors.white,
         borderRadius: BorderRadius.circular(4),
       ),
     );
@@ -67,7 +67,11 @@ class _OnboardingScreenState extends State<Info> {
 
     return Scaffold(
       body: Container(
-        color: _currentPage == _pages.length - 1 ? Colors.black : Theme.of(context).scaffoldBackgroundColor, // Conditional background color
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2],
+            end: Alignment.topRight,
+            begin: Alignment.bottomLeft,),
+        ),
         child: SafeArea(
           child: Column(
             children: [
@@ -102,7 +106,7 @@ class _OnboardingScreenState extends State<Info> {
                             style: TextStyle(
                               fontSize: isTablet ? 28 : 24,
                               fontWeight: FontWeight.bold,
-                              color: isLastPage ? Pallete.progress1 : Pallete.progress2,
+                              color: Colors.black,
                             ),
                           ),
                           SizedBox(height: screenHeight * 0.02),
@@ -114,8 +118,8 @@ class _OnboardingScreenState extends State<Info> {
                               page["subtitle"]!,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: isTablet ? 16 : 14,
-                                color: isLastPage ? Pallete.progress1 : Pallete.progress2,
+                                fontSize: isTablet ? 18 : 16,
+                                color: Colors.black,
                               ),
                             ),
                           ),
@@ -142,8 +146,8 @@ class _OnboardingScreenState extends State<Info> {
                     onPressed: _onNextPressed,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _currentPage == _pages.length - 1
-                          ? Pallete.progress1
-                          : Pallete.progress2,
+                          ? Pallete.authButton
+                          : Pallete.authButton,
                       padding: EdgeInsets.symmetric(
                         horizontal: isTablet ? 60 : 90,
                         vertical: isTablet ? 18 : 14,
@@ -158,8 +162,8 @@ class _OnboardingScreenState extends State<Info> {
                         fontSize: isTablet ? 18 : 16,
                         fontWeight: FontWeight.bold,
                         color: _currentPage == _pages.length - 1
-                            ? Color(0xFF006A67)
-                            : Theme.of(context).scaffoldBackgroundColor,
+                            ? Colors.white
+                            : Colors.white,
                       ),
                     ),
                   ),

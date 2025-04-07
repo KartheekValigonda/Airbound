@@ -27,11 +27,11 @@ Widget commonTextfield({
           borderRadius: BorderRadius.circular(30)
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Pallete.progress2), // Border color when enabled
+          borderSide: const BorderSide(color: Pallete.authButton), // Border color when enabled
           borderRadius: BorderRadius.circular(30),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.black, width: 1.0), // Border color when focused
+          borderSide: const BorderSide(color: Pallete.authButton, width: 1.0), // Border color when focused
           borderRadius: BorderRadius.circular(30),
         ),
       ),
