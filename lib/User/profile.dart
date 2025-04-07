@@ -115,6 +115,7 @@ class _ProfileState extends State<Profile> {
     final theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor: Pallete.backgroundColor,
       body: Stack(
         children: [
           ClipPath(

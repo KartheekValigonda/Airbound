@@ -96,11 +96,11 @@ class _RecoveryState extends State<Recovery> {
                 child: CircularProgressIndicator(
                   value: _progressValue.value,
                   strokeWidth: 30,
-                  backgroundColor: Pallete.progress1,
+                  backgroundColor: Pallete.bigCard,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    _progressValue.value >= 1.0 
-                      ? Pallete.progress2
-                      : Pallete.progress2,
+                    _progressValue.value >= 1.0
+                      ? Pallete.authButton
+                      : Pallete.authButton,
                   ),
                 ),
               ),
@@ -112,7 +112,7 @@ class _RecoveryState extends State<Recovery> {
                       ? "completed! 🎉"
                       : "${(20 - (DateTime.now().difference(_lastSmokeTime.value).inMinutes)).toString()} mins remaining",
                     style: TextStyle(
-                      color: _progressValue.value >= 1.0 ? Pallete.progress2 : Pallete.progress2,
+                      color: _progressValue.value >= 1.0 ? Colors.black : Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -128,7 +128,7 @@ class _RecoveryState extends State<Recovery> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Pallete.progress2,
+              color: Colors.black,
             ),
           ),
           SizedBox(height: 8),
@@ -136,7 +136,7 @@ class _RecoveryState extends State<Recovery> {
             "Your heart rate and blood pressure drop.",
             style: TextStyle(
               fontSize: 14,
-              color: Pallete.progress2,
+              color: Colors.black,
             ),
             textAlign: TextAlign.center,
           ),
@@ -150,11 +150,11 @@ class _RecoveryState extends State<Recovery> {
                 child: CircularProgressIndicator(
                   value: _progressValue12Hours.value,
                   strokeWidth: 30,
-                  backgroundColor: Pallete.progress1,
+                  backgroundColor: Pallete.bigCard,
                   valueColor: AlwaysStoppedAnimation<Color>(
                     _progressValue12Hours.value >= 1.0 
-                      ? Pallete.progress2
-                      : Pallete.progress2,
+                      ? Pallete.authButton
+                      : Pallete.authButton,
                   ),
                 ),
               ),
@@ -166,7 +166,7 @@ class _RecoveryState extends State<Recovery> {
                       ? "completed! 🎉"
                       : "${(12 - (DateTime.now().difference(_lastSmokeTime.value).inHours)).toString()} hours remaining",
                     style: TextStyle(
-                      color: _progressValue12Hours.value >= 1.0 ? Pallete.progress2 : Pallete.progress2,
+                      color: _progressValue12Hours.value >= 1.0 ? Colors.black : Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -182,7 +182,7 @@ class _RecoveryState extends State<Recovery> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Pallete.progress2,
+              color: Colors.black,
             ),
           ),
           SizedBox(height: 8),
@@ -190,7 +190,7 @@ class _RecoveryState extends State<Recovery> {
             "Carbon monoxide level in your blood drops to normal.",
             style: TextStyle(
               fontSize: 14,
-              color: Pallete.progress2,
+              color: Colors.black,
             ),
             textAlign: TextAlign.center,
           ),
@@ -204,11 +204,11 @@ class _RecoveryState extends State<Recovery> {
                 child: CircularProgressIndicator(
                   value: _progressValue60Days.value,
                   strokeWidth: 30,
-                  backgroundColor: Pallete.progress1,
+                  backgroundColor: Pallete.bigCard,
                   valueColor: AlwaysStoppedAnimation<Color>(
                     _progressValue60Days.value >= 1.0 
-                      ? Pallete.progress2
-                      : Pallete.progress2,
+                      ? Pallete.authButton
+                      : Pallete.authButton,
                   ),
                 ),
               ),
@@ -220,7 +220,7 @@ class _RecoveryState extends State<Recovery> {
                       ? "60 days completed! 🎉" 
                       : "${(60 - (DateTime.now().difference(_lastSmokeTime.value).inDays)).toString()} days remaining",
                     style: TextStyle(
-                      color: _progressValue60Days.value >= 1.0 ? Pallete.progress2 : Pallete.progress2,
+                      color: _progressValue60Days.value >= 1.0 ? Colors.black : Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -236,7 +236,7 @@ class _RecoveryState extends State<Recovery> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Pallete.progress2,
+              color: Colors.black,
             ),
           ),
           SizedBox(height: 8),
@@ -244,7 +244,7 @@ class _RecoveryState extends State<Recovery> {
             "Your lung function improves significantly.",
             style: TextStyle(
               fontSize: 14,
-              color: Pallete.progress2,
+              color: Colors.black,
             ),
             textAlign: TextAlign.center,
           ),
@@ -294,145 +294,135 @@ class _RecoveryState extends State<Recovery> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: Stack(
-        children: [
-          ClipPath(
-            child: Container(
-              height: screenHeight*0.28,
-              child: Center(child: Text("")),
-              decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2]),
-                  borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50),
-                  bottomRight: Radius.circular(50),
-                )
-              ),
-            ),
-          ),
-          Obx(() => _isLoading.value
-              ? const Center(child: CircularProgressIndicator())
-              : Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.04,
-                    vertical: screenHeight * 0.03,
-                  ),
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Column(
-                      children: [
-                        SizedBox(height: screenHeight * 0.06),
-                        Text("Recovery", style: theme.textTheme.titleLarge),
-                        SizedBox(height: screenHeight * 0.05),
-                        Container(
-                          width: screenWidth * 0.87,
-                          height: screenHeight * 0.065,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.03,
-                            vertical: screenHeight * 0.01,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Pallete.bigCard,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  "Monthly Expenditure",
-                                  style: theme.textTheme.bodySmall,
-                                ),
-                              ),
-                              Text(
-                                "₹${_monthlyExpenditure.value.toStringAsFixed(2)}",
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2],
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,),
+        ),
+        child: Obx(() => _isLoading.value
+            ? const Center(child: CircularProgressIndicator())
+            : Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.04,
+                  vertical: screenHeight * 0.03,
+                ),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      SizedBox(height: screenHeight * 0.06),
+                      Text("Recovery", style: theme.textTheme.titleLarge),
+                      SizedBox(height: screenHeight * 0.05),
+                      Container(
+                        width: screenWidth * 0.87,
+                        height: screenHeight * 0.065,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.03,
+                          vertical: screenHeight * 0.01,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Pallete.bigCard,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Monthly Expenditure",
                                 style: theme.textTheme.bodySmall,
                               ),
-                            ],
-                          ),
+                            ),
+                            Text(
+                              "₹${_monthlyExpenditure.value.toStringAsFixed(2)}",
+                              style: theme.textTheme.bodySmall,
+                            ),
+                          ],
                         ),
-                        SizedBox(height: screenHeight * 0.05),
-                        _buildProgressBar(),
-                        SizedBox(height: screenHeight * 0.03),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children:[
-                              Container(
+                      ),
+                      SizedBox(height: screenHeight * 0.05),
+                      _buildProgressBar(),
+                      SizedBox(height: screenHeight * 0.03),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children:[
+                            Container(
+                            decoration: BoxDecoration(
+                              color: Pallete.bigCard,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Pallete.authButton,
+                                  spreadRadius: 1,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            width: screenWidth*0.5,
+                              height: screenHeight*0.4,
+                              padding: EdgeInsets.all(16),
+                            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                            child: Column(
+                              children: [
+                                Text("1 year after quitting",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),),
+                                SizedBox(height: screenHeight * 0.02),
+                                Text("Your risk of heart disease is cut in half.",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black
+                                  ),),
+                              ],
+                            ),
+                          ),
+                            Container(
                               decoration: BoxDecoration(
-                                color: Pallete.smallCard,
+                                color: Pallete.bigCard,
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 3,
-                                    blurRadius: 7,
+                                    color: Pallete.authButton,
+                                    spreadRadius: 1,
+                                    blurRadius: 4,
                                     offset: Offset(0, 3),
                                   ),
                                 ],
                               ),
                               width: screenWidth*0.5,
-                                height: screenHeight*0.4,
-                                padding: EdgeInsets.all(16),
+                              height: screenHeight*0.4,
+                              padding: EdgeInsets.all(16),
                               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                               child: Column(
                                 children: [
-                                  Text("1 year after quitting",
+                                  Text("2 to 5 years after quitting",
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                                      color:Colors.black,
                                     ),),
                                   SizedBox(height: screenHeight * 0.02),
-                                  Text("Your risk of heart disease is cut in half.",
+                                  Text("Your risk of cancers of the mouth, throat, esophagus, and bladder is cut in half. Your stroke risk drops to that of a person who doesn't smoke.",
                                     style: TextStyle(
                                       fontSize: 16,
-                                      color: Colors.black
+                                      color: Colors.black,
                                     ),),
                                 ],
                               ),
                             ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Pallete.smallCard,
-                                  borderRadius: BorderRadius.circular(12),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.3),
-                                      spreadRadius: 3,
-                                      blurRadius: 7,
-                                      offset: Offset(0, 3),
-                                    ),
-                                  ],
-                                ),
-                                width: screenWidth*0.5,
-                                height: screenHeight*0.4,
-                                padding: EdgeInsets.all(16),
-                                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                                child: Column(
-                                  children: [
-                                    Text("2 to 5 years after quitting",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color:Colors.black,
-                                      ),),
-                                    SizedBox(height: screenHeight * 0.02),
-                                    Text("Your risk of cancers of the mouth, throat, esophagus, and bladder is cut in half. Your stroke risk drops to that of a person who doesn't smoke.",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                      ),),
-                                  ],
-                                ),
-                              ),
-                           ]
-                          ),
+                         ]
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                )),
-        ],
+                ),
+              )),
       ),
     );
   }

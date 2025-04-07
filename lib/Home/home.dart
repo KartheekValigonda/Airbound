@@ -134,167 +134,157 @@ class _HomeScreenState extends State<HomeScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: Stack(
-        children: [
-          ClipPath(
-            child: Container(
-              height: screenHeight*0.28,
-              child: Center(child: Text("")),
-              decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2]),
-                  borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50),
-                  bottomRight: Radius.circular(50),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2],
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: screenHeight * 0.12),
+                Text("A New", style: theme.textTheme.titleLarge),
+                Text("Journey Begins", style: theme.textTheme.titleLarge),
+                SizedBox(height: screenHeight * 0.025),
+
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth*0.02, vertical: screenHeight*0.02),
+                  decoration: BoxDecoration(
+                    color: Pallete.bigCard,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "You last smoked: ",
+                        style: theme.textTheme.bodySmall
+                      ),
+                      Text(
+                        timeSinceLastSmoke,
+                        style: theme.textTheme.bodySmall
+                      ),
+                      Text(
+                        "Keep it Up!! Continue The Streak",
+                        style: theme.textTheme.bodySmall
+                      ),
+                      SizedBox(height: screenHeight * 0.01),
+                      commonButton(
+                        onNavigate: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Progress()),
+                          );
+                        },
+                        width: screenWidth * 0.6,
+                        height: screenHeight * 0.04,
+                        buttonName: "Track Your Progress",
+                        txtclr: Colors.black,
+                        clr: Colors.white70,
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: screenHeight * 0.02),
+                Center(
+                  child: Text(
+                    "Introduction",
+                      style: theme.textTheme.bodyLarge
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.005),
+                Text(
+                  "Modules",
+                    style: theme.textTheme.bodyMedium
+                ),
+                SizedBox(height: screenHeight * 0.015),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () =>
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => WelcomeScreen())),
+                        child: commonCard(
+                          text: "START HERE: Welcome to QuitSure",
+                          horizontal: screenWidth * 0.01,
+                          vertical: screenHeight * 0.001,
+                          width: screenWidth * 0.4,
+                          height: screenHeight * 0.2,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () =>
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => Needtoquit())),
+                        child: commonCard(
+                          text: "But Do I Really Need to Quit Smoking",
+                          horizontal: screenWidth * 0.01,
+                          vertical: screenHeight * 0.001,
+                          width: screenWidth * 0.4,
+                          height: screenHeight * 0.2,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () =>
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => SomeQues())),
+                        child: commonCard(
+                          text: "Some Important Questions",
+                          horizontal: screenWidth * 0.01,
+                          vertical: screenHeight * 0.001,
+                          width: screenWidth * 0.4,
+                          height: screenHeight * 0.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                Text(
+                  "Exercises",
+                    style: theme.textTheme.bodyMedium
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () =>
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => Whyquit())),
+                        child: commonCard(
+                          text: "Why I Want to Quit",
+                          horizontal: screenWidth * 0.01,
+                          vertical: screenHeight * 0.001,
+                          width: screenWidth * 0.4,
+                          height: screenHeight * 0.2,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () =>
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => Workouts())),
+                        child: commonCard(
+                          text: "Quitting is Enjoyable",
+                          horizontal: screenWidth * 0.01,
+                          vertical: screenHeight * 0.001,
+                          width: screenWidth * 0.4,
+                          height: screenHeight * 0.2,
+                        ),
+                      ),
+                    ],
+                  ),
                 )
-              ),
+              ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
-            child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: screenHeight * 0.12),
-                  Text("A New", style: theme.textTheme.titleLarge?.copyWith(color: Colors.white)),
-                  Text("Journey Begins", style: theme.textTheme.titleLarge?.copyWith(color: Colors.white)),
-                  SizedBox(height: screenHeight * 0.025),
-
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: screenWidth*0.02, vertical: screenHeight*0.02),
-                    decoration: BoxDecoration(
-                      color: Pallete.bigCard,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "You last smoked: ",
-                          style: theme.textTheme.bodySmall
-                        ),
-                        Text(
-                          timeSinceLastSmoke,
-                          style: theme.textTheme.bodySmall
-                        ),
-                        Text(
-                          "Keep it Up!! Continue The Streak",
-                          style: theme.textTheme.bodySmall
-                        ),
-                        SizedBox(height: screenHeight * 0.01),
-                        commonButton(
-                          onNavigate: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Progress()),
-                            );
-                          },
-                          width: screenWidth * 0.6,
-                          height: screenHeight * 0.04,
-                          buttonName: "Track Your Progress",
-                          txtclr: Colors.black,
-                          clr: Colors.white70,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: screenHeight * 0.02),
-                  Center(
-                    child: Text(
-                      "Introduction",
-                        style: theme.textTheme.bodyLarge
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.005),
-                  Text(
-                    "Modules",
-                      style: theme.textTheme.bodyMedium
-                  ),
-                  SizedBox(height: screenHeight * 0.015),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () =>
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => WelcomeScreen())),
-                          child: commonCard(
-                            text: "START HERE: Welcome to QuitSure",
-                            horizontal: screenWidth * 0.01,
-                            vertical: screenHeight * 0.001,
-                            width: screenWidth * 0.4,
-                            height: screenHeight * 0.2,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () =>
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => Needtoquit())),
-                          child: commonCard(
-                            text: "But Do I Really Need to Quit Smoking",
-                            horizontal: screenWidth * 0.01,
-                            vertical: screenHeight * 0.001,
-                            width: screenWidth * 0.4,
-                            height: screenHeight * 0.2,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () =>
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => SomeQues())),
-                          child: commonCard(
-                            text: "Some Important Questions",
-                            horizontal: screenWidth * 0.01,
-                            vertical: screenHeight * 0.001,
-                            width: screenWidth * 0.4,
-                            height: screenHeight * 0.2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  Text(
-                    "Exercises",
-                      style: theme.textTheme.bodyMedium
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () =>
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => Whyquit())),
-                          child: commonCard(
-                            text: "Why I Want to Quit",
-                            horizontal: screenWidth * 0.01,
-                            vertical: screenHeight * 0.001,
-                            width: screenWidth * 0.4,
-                            height: screenHeight * 0.2,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () =>
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => Workouts())),
-                          child: commonCard(
-                            text: "Quitting is Enjoyable",
-                            horizontal: screenWidth * 0.01,
-                            vertical: screenHeight * 0.001,
-                            width: screenWidth * 0.4,
-                            height: screenHeight * 0.2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

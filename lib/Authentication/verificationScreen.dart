@@ -103,51 +103,58 @@ class _VerificationScreenState extends State<VerificationScreen> {
       onWillPop: () async => false, // Prevent back navigation
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Pallete.progress2,
-          title: const Text("Verify Your Email"),
+          backgroundColor: Pallete.gradient1,
+          title:  Text("Verify Your Email",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF4e6655))),
           automaticallyImplyLeading: false, // Disable back button
         ),
-        body: Stack(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'A verification email has been sent',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  Text(
-                    'Please check your mail inbox and verify your email.',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  SizedBox(height: screenHeight * 0.1),
-                  ElevatedButton(
-                    onPressed: _emailSent ? _sendVerificationEmail : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Pallete.progress2,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(35),
-                      ),
-                      fixedSize: Size(screenWidth * 0.65, screenHeight * 0.065),
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2],
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,),
+          ),
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'A verification email has been sent',
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    child: Text(_emailSent ? 'Resend Email' : 'Sending...'),
-                  ),
-                ],
-              ),
-            ),
-            if (_isLoading)
-              Container(
-                color: Colors.black.withOpacity(0.5),
-                child: const Center(
-                  child: CircularProgressIndicator(),
+                    SizedBox(height: screenHeight * 0.02),
+                    Text(
+                      'Please check your mail inbox and verify your email.',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    SizedBox(height: screenHeight * 0.1),
+                    ElevatedButton(
+                      onPressed: _emailSent ? _sendVerificationEmail : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Pallete.authButton,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+
+                          borderRadius: BorderRadius.circular(35),
+                        ),
+                        fixedSize: Size(screenWidth * 0.65, screenHeight * 0.065),
+                      ),
+                      child: Text(_emailSent ? 'Resend Email' : 'Sending...'),
+                    ),
+                  ],
                 ),
               ),
-          ],
+              if (_isLoading)
+                Container(
+                  color: Colors.black.withOpacity(0.5),
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

@@ -29,103 +29,92 @@ class _LoginPageState extends State<LoginPage> {
     final verticalPadding = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: SizedBox(
+      body: Container(
         height: double.infinity,
-        child: Stack(children: [
-          Positioned(
-            top: verticalPadding * 0.25, // Adjust negative offset as needed
-            right: horizontalPadding * 0.1,
-            child: Transform.rotate(
-              angle: 45 * math.pi / 180, // 45 degree rotation
-              child: Container(
-                width: horizontalPadding * 2, // Adjust size as needed
-                height: horizontalPadding * 2.1,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2]),
-                ),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2],
+            end: Alignment.topRight,
+            begin: Alignment.bottomLeft,),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: verticalPadding * 0.18),
+              Text(
+                "Login",
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-            ),
-          ),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: verticalPadding * 0.18),
-                Text(
-                  "Login",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                SizedBox(
-                  height: verticalPadding * 0.08,
-                ),
-                commonTextfield(
-                  controller: controller.emailController,
-                  hinttext: "Email",
-                  obstxt: false,
-                  width: horizontalPadding * 0.85,
-                  height: verticalPadding * 0.07,
-                  context: context,
-                ),
-                SizedBox(
-                  height: verticalPadding * 0.015,
-                ),
-                commonTextfield(
-                  controller: controller.passController,
-                  hinttext: "Password",
-                  obstxt: true,
-                  width: horizontalPadding * 0.85,
-                  height: verticalPadding * 0.07,
-                  context: context,
-                ),
-                SizedBox(height: verticalPadding * 0.03),
-                commonButton(
-                  onNavigate: () async {
-                    UserCredential? userCredential = await controller.loginMethod(context: context);
-                    if (userCredential != null) {
-                      Get.offAll(() => Home());
-                    }
-                  },
-                  buttonName: "login",
-                  width: horizontalPadding * 0.85,
-                  height: verticalPadding * 0.07,
-                  clr: Pallete.progress2,
-                  txtclr: Colors.white,
-                ),
-                SizedBox(height: verticalPadding * 0.04),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: horizontalPadding * 0.12),
-                  child: Divider(height: 1,),
-                ),
-                Text(
-                  "OR",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                SizedBox(height: verticalPadding * 0.04),
-                commonButton(
-                  onNavigate: () {},
-                  buttonName: "Continue with Google",
-                  width: horizontalPadding * 0.85,
-                  height: verticalPadding * 0.07,
-                  clr: Colors.white,
-                  txtclr: Colors.black,
-                ),
+              SizedBox(
+                height: verticalPadding * 0.08,
+              ),
+              commonTextfield(
+                controller: controller.emailController,
+                hinttext: "Email",
+                obstxt: false,
+                width: horizontalPadding * 0.85,
+                height: verticalPadding * 0.07,
+                context: context,
+              ),
+              SizedBox(
+                height: verticalPadding * 0.015,
+              ),
+              commonTextfield(
+                controller: controller.passController,
+                hinttext: "Password",
+                obstxt: true,
+                width: horizontalPadding * 0.85,
+                height: verticalPadding * 0.07,
+                context: context,
+              ),
+              SizedBox(height: verticalPadding * 0.03),
+              commonButton(
+                onNavigate: () async {
+                  UserCredential? userCredential = await controller.loginMethod(context: context);
+                  if (userCredential != null) {
+                    Get.offAll(() => Home());
+                  }
+                },
+                buttonName: "Login",
+                width: horizontalPadding * 0.85,
+                height: verticalPadding * 0.07,
+                clr: Pallete.authButton,
+                txtclr: Colors.white,
+              ),
+              SizedBox(height: verticalPadding * 0.04),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding * 0.12),
+                child: Divider(height: 1, color: Pallete.authButton,),
+              ),
+              Text(
+                "OR",
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              SizedBox(height: verticalPadding * 0.04),
+              commonButton(
+                onNavigate: () {},
+                buttonName: "Continue with Google",
+                width: horizontalPadding * 0.85,
+                height: verticalPadding * 0.07,
+                clr: Colors.white,
+                txtclr: Colors.black,
+              ),
 
-                SizedBox(height: verticalPadding*0.04),
-                GestureDetector(
-                  onTap: () {
-                    Get.off(()=> Signup2());
-                  },
-                  child: RichText(
-                    text: TextSpan(text: "Don't have an account!!",style: Theme.of(context).textTheme.bodySmall,
-                      children: [
-                        TextSpan(text:"  SignUp",  style: Theme.of(context).textTheme.titleMedium,),
-                      ],
-                    ),
+              SizedBox(height: verticalPadding*0.04),
+              GestureDetector(
+                onTap: () {
+                  Get.off(()=> Signup2());
+                },
+                child: RichText(
+                  text: TextSpan(text: "Don't have an account!!",style: Theme.of(context).textTheme.bodySmall,
+                    children: [
+                      TextSpan(text:"  SignUp",  style: Theme.of(context).textTheme.titleMedium,),
+                    ],
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
-        ]),
+        ),
       ),
     );
   }
