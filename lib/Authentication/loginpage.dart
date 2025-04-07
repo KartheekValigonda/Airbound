@@ -33,8 +33,8 @@ class _LoginPageState extends State<LoginPage> {
         height: double.infinity,
         child: Stack(children: [
           Positioned(
-            top: verticalPadding * 0.25, // Adjust negative offset as needed
-            right: horizontalPadding * 0.1,
+            top: verticalPadding * 0.4, // Adjust negative offset as needed
+            right: horizontalPadding * 0.01,
             child: Transform.rotate(
               angle: 45 * math.pi / 180, // 45 degree rotation
               child: Container(
