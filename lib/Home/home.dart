@@ -12,6 +12,7 @@ import 'package:airbound/common%20widgets/commonbutton.dart';
 import 'package:airbound/common%20widgets/commonCard.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -34,20 +35,23 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: Colors.transparent,
+        color: Pallete.gradient1,
+        buttonBackgroundColor: Pallete.authButton,
+        height: 60,
+        animationDuration: const Duration(milliseconds: 300),
+        index: _currentIndex,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
           });
         },
-        type: BottomNavigationBarType.fixed,
-        // Theme properties are applied via BottomNavigationBarThemeData
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.show_chart), label: "Progress"),
-          BottomNavigationBarItem(icon: Icon(Icons.monitor_heart_outlined), label: "Recovery"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          Icon(Icons.home, color: Pallete.backgroundColor),
+          Icon(Icons.show_chart, color: Pallete.backgroundColor),
+          Icon(Icons.monitor_heart_outlined, color:Pallete.backgroundColor),
+          Icon(Icons.person, color: Pallete.backgroundColor),
         ],
       ),
     );
