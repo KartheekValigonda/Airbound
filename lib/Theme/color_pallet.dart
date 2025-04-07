@@ -8,8 +8,6 @@ class Pallete {
   static const Color gradient1 = Color(0xFF8eb296);
   static const Color gradient2 = Color(0xFFfaf8ed);
 
-  static const Color progress1 = Color(0xFF006A71);
-  static const Color progress2 = Color(0xFF006A71);
   static const Color backgroundColor = Color(0xFFf1f0e5);
 
   static const Color transparentColor = Colors.transparent;

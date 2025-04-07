@@ -60,90 +60,70 @@ class SomeQues extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final theme = Theme.of(context);
 
     return Scaffold(
-      body: Stack(
-        children: [
-          ClipPath(
-            child: Container(
-              height: screenHeight*0.28,
-              child: Center(child: Text("")),
-              decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2]),
-                  borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50),
-                  bottomRight: Radius.circular(50),
-                )
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2],
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,),
+        ),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(screenWidth * 0.04),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: screenHeight * 0.12),
+              Text(
+                'Quit Smoking Q&A',
+                style: theme.textTheme.titleLarge
               ),
-            ),
-          ),
-          SingleChildScrollView(
-            padding: EdgeInsets.all(screenWidth * 0.04),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: screenHeight * 0.12),
-                Text(
-                  'Quit Smoking Q&A',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.06,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: screenHeight * 0.02),
-                // Header Image
-                Container(
-                  width: double.infinity,
-                  height: screenHeight * 0.25,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                    image: const DecorationImage(
-                      image: NetworkImage(
-                        'https://images.unsplash.com/photo-1505455184862-554165e5f6ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80',
-                      ),
-                      fit: BoxFit.cover,
+              SizedBox(height: screenHeight * 0.02),
+              // Header Image
+              Container(
+                width: double.infinity,
+                height: screenHeight * 0.25,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                  image: const DecorationImage(
+                    image: NetworkImage(
+                      'https://images.unsplash.com/photo-1505455184862-554165e5f6ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80',
                     ),
+                    fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.02),
+              ),
+              SizedBox(height: screenHeight * 0.02),
 
-                // Title
-                Text(
-                  'Key Questions About Quitting Smoking',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.08, // Dynamic font size
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.015),
+              // Title
+              Text(
+                'Key Questions About Quitting Smoking',
+                  style: theme.textTheme.bodyLarge
+              ),
+              SizedBox(height: screenHeight * 0.015),
 
-                // Introduction Text
-                Text(
-                  "Here are some vital questions I've asked myself about quitting smoking—and the answers that keep me motivated!",
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.045, // Dynamic font size
-                    color: Colors.black87,
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.025),
+              // Introduction Text
+              Text(
+                "Here are some vital questions I've asked myself about quitting smoking—and the answers that keep me motivated!",
+                  style: theme.textTheme.bodySmall
+              ),
+              SizedBox(height: screenHeight * 0.025),
 
-                // Q&A Expansion Tiles
-                ...qaList.map((qa) => _buildQuestionTile(
-                  context,
-                  question: qa['question']!,
-                  answer: qa['answer']!,
-                  imageUrl: qa['imageUrl']!,
-                  screenWidth: screenWidth,
-                  screenHeight: screenHeight,
-                )).toList(),
+              // Q&A Expansion Tiles
+              ...qaList.map((qa) => _buildQuestionTile(
+                context,
+                question: qa['question']!,
+                answer: qa['answer']!,
+                imageUrl: qa['imageUrl']!,
+                screenWidth: screenWidth,
+                screenHeight: screenHeight,
+              )).toList(),
 
-                SizedBox(height: screenHeight * 0.025),
-              ],
-            ),
+              SizedBox(height: screenHeight * 0.025),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -156,6 +136,8 @@ class SomeQues extends StatelessWidget {
         required double screenWidth,
         required double screenHeight,
       }) {
+
+    final theme = Theme.of(context);
     return Card(
       elevation: 3,
       margin: EdgeInsets.only(bottom: screenHeight * 0.015), // Dynamic margin
@@ -165,10 +147,7 @@ class SomeQues extends StatelessWidget {
       child: ExpansionTile(
         title: Text(
           question,
-          style: TextStyle(
-            fontSize: screenWidth * 0.05, // Dynamic font size
-            fontWeight: FontWeight.bold,
-          ),
+            style: theme.textTheme.bodyMedium
         ),
         children: [
           Padding(
@@ -188,10 +167,7 @@ class SomeQues extends StatelessWidget {
                 SizedBox(height: screenHeight * 0.015),
                 Text(
                   answer,
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.045, // Dynamic font size
-                    color: Colors.black87,
-                  ),
+                    style: theme.textTheme.bodySmall
                 ),
               ],
             ),

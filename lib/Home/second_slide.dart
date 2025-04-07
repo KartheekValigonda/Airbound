@@ -1,5 +1,6 @@
 import 'package:airbound/Home/home.dart';
 import 'package:airbound/Progress/progress.dart';
+import 'package:airbound/Theme/color_pallet.dart';
 import 'package:flutter/material.dart';
 
 class Needtoquit extends StatefulWidget {
@@ -55,8 +56,8 @@ class _NeedtoquitState extends State<Needtoquit> {
                   height: 8.0,
                   decoration: BoxDecoration(
                     color: _currentPage == index
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.primary.withOpacity(0.4),
+                        ? Pallete.authButton
+                        : Pallete.gradient1,
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 );
@@ -74,19 +75,19 @@ class _NeedtoquitState extends State<Needtoquit> {
     return Container(
       padding: EdgeInsets.symmetric(
           horizontal: screenWidth * 0.06, vertical: screenHeight * 0.1),
-      color: theme.scaffoldBackgroundColor,
+      color: Pallete.backgroundColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.smoke_free,
             size: 100,
-            color: theme.colorScheme.primary,
+            color: Pallete.authButton,
           ),
           SizedBox(height: screenHeight * 0.04),
           Text(
             'The Health Risks of Smoking',
-            style: theme.textTheme.headlineSmall?.copyWith(fontSize: 28),
+            style: theme.textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: screenHeight * 0.02),
@@ -108,19 +109,19 @@ class _NeedtoquitState extends State<Needtoquit> {
     return Container(
       padding: EdgeInsets.symmetric(
           horizontal: screenWidth * 0.06, vertical: screenHeight * 0.1),
-      color: theme.scaffoldBackgroundColor,
+      color: Pallete.backgroundColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             "Let's do it together",
-            style: theme.textTheme.headlineSmall?.copyWith(fontSize: 28),
+            style: theme.textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: screenHeight * 0.03),
           Text(
             "Quitting smoking is challenging, but the benefits are worth it. You'll save money, improve your lung function, and set a positive example for others. Every day without smoking is a step toward a healthier, happier life!",
-            style: theme.textTheme.bodyLarge,
+            style: theme.textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: screenHeight * 0.06),
@@ -132,7 +133,7 @@ class _NeedtoquitState extends State<Needtoquit> {
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(
                   horizontal: screenWidth * 0.1, vertical: 15),
-              backgroundColor: theme.colorScheme.primary,
+              backgroundColor: Pallete.authButton,
               foregroundColor: Colors.white,
             ),
             child: const Text("Let's go"),

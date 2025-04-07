@@ -16,6 +16,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
   final uid = FirebaseAuth.instance.currentUser?.uid;
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _cigarettesPerDayController = TextEditingController();
+  final _costPerCigaretteController = TextEditingController();
   final _isLoading = false.obs;
   final _selectedProfilePic = RxnString();
   final _profilePics = <String>[].obs;
@@ -33,6 +35,18 @@ class _UpdateProfileState extends State<UpdateProfile> {
       if (userData.exists) {
         _nameController.text = userData.data()?['name'] ?? '';
         _selectedProfilePic.value = userData.data()?['profile_pic'];
+        
+        // Load cigarettes per day
+        final cigarettesPerDay = userData.data()?['cigarettesPerDay'];
+        if (cigarettesPerDay != null) {
+          _cigarettesPerDayController.text = cigarettesPerDay.toString();
+        }
+        
+        // Load cost per cigarette
+        final costPerCigarette = userData.data()?['costPerCigarette'];
+        if (costPerCigarette != null) {
+          _costPerCigaretteController.text = costPerCigarette.toString();
+        }
       }
     } catch (e) {
       Get.snackbar(
@@ -212,6 +226,22 @@ class _UpdateProfileState extends State<UpdateProfile> {
       if (_selectedProfilePic.value != null) {
         updateData['profile_pic'] = _selectedProfilePic.value;
       }
+      
+      // Update cigarettes per day
+      if (_cigarettesPerDayController.text.trim().isNotEmpty) {
+        final cigarettesPerDay = int.tryParse(_cigarettesPerDayController.text.trim());
+        if (cigarettesPerDay != null) {
+          updateData['cigarettesPerDay'] = cigarettesPerDay;
+        }
+      }
+      
+      // Update cost per cigarette
+      if (_costPerCigaretteController.text.trim().isNotEmpty) {
+        final costPerCigarette = double.tryParse(_costPerCigaretteController.text.trim());
+        if (costPerCigarette != null) {
+          updateData['costPerCigarette'] = costPerCigarette;
+        }
+      }
 
       // Update Firestore document
       if (updateData.isNotEmpty) {
@@ -245,6 +275,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
   @override
   void dispose() {
     _nameController.dispose();
+    _cigarettesPerDayController.dispose();
+    _costPerCigaretteController.dispose();
     super.dispose();
   }
 
@@ -255,6 +287,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
     final theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor: Pallete.backgroundColor,
       body: Stack(
         children: [
           // Gradient background header
@@ -329,24 +362,102 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           controller: _nameController,
                           style: theme.textTheme.bodyMedium,
                           decoration: InputDecoration(
-                            labelText: 'Full Name',
+                            labelText: 'Name',
                             labelStyle: theme.textTheme.bodyMedium,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Pallete.progress2),
+                              borderSide: const BorderSide(color: Pallete.authButton),
                               borderRadius: BorderRadius.circular(30),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: const BorderSide(color: Colors.black, width: 1.0),
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            prefixIcon: const Icon(Icons.person, color: Pallete.progress2),
+                            prefixIcon: const Icon(Icons.person, color: Pallete.authButton),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your name';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.02),
+                      // Cigarettes per day field
+                      Container(
+                        width: screenWidth * 0.9,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: TextFormField(
+                          controller: _cigarettesPerDayController,
+                          style: theme.textTheme.bodyMedium,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: 'Cigarettes per Day',
+                            labelStyle: theme.textTheme.bodyMedium,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Pallete.authButton),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            prefixIcon: const Icon(Icons.smoking_rooms, color: Pallete.authButton),
+                          ),
+                          validator: (value) {
+                            if (value != null && value.isNotEmpty) {
+                              final number = int.tryParse(value);
+                              if (number == null) {
+                                return 'Please enter a valid number';
+                              }
+                              if (number < 0) {
+                                return 'Number cannot be negative';
+                              }
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.02),
+                      // Cost per cigarette field
+                      Container(
+                        width: screenWidth * 0.9,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: TextFormField(
+                          controller: _costPerCigaretteController,
+                          style: theme.textTheme.bodyMedium,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: 'Cost per Cigarette (₹)',
+                            labelStyle: theme.textTheme.bodyMedium,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Pallete.authButton),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            prefixIcon: const Icon(Icons.currency_rupee, color: Pallete.authButton),
+                          ),
+                          validator: (value) {
+                            if (value != null && value.isNotEmpty) {
+                              final number = double.tryParse(value);
+                              if (number == null) {
+                                return 'Please enter a valid number';
+                              }
+                              if (number < 0) {
+                                return 'Cost cannot be negative';
+                              }
                             }
                             return null;
                           },
@@ -360,7 +471,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         child: Obx(() => ElevatedButton(
                           onPressed: _isLoading.value ? null : _updateProfile,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Pallete.progress2,
+                            backgroundColor: Pallete.authButton,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),

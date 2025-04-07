@@ -1,6 +1,8 @@
 import 'package:airbound/Progress/progress.dart';
 import 'package:flutter/material.dart';
 
+import '../Theme/color_pallet.dart' show Pallete;
+
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
@@ -25,6 +27,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: Pallete.backgroundColor,
       body: Stack(
         children: [
           PageView(
@@ -55,8 +58,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   height: 8.0,
                   decoration: BoxDecoration(
                     color: _currentPage == index
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.primary.withOpacity(0.4),
+                        ? Pallete.authButton
+                        : Pallete.gradient1,
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 );
@@ -74,25 +77,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Container(
       padding: EdgeInsets.symmetric(
           horizontal: screenWidth * 0.06, vertical: screenHeight * 0.1),
-      color: theme.scaffoldBackgroundColor,
+      color: Pallete.backgroundColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.smoke_free,
             size: 100,
-            color: theme.colorScheme.primary,
+            color: Pallete.authButton,
           ),
           SizedBox(height: screenHeight * 0.04),
           Text(
             "Welcome to Airbound",
-            style: theme.textTheme.headlineSmall?.copyWith(fontSize: 28),
+            style: theme.textTheme.headlineSmall,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: screenHeight * 0.02),
           Text(
             "Your journey to a smoke-free life begins now! Airbound provides the support, tracking, and motivation you need to quit smoking. Stay committed, monitor progress, and embrace a healthier lifestyle with our guidance. Take the first step toward a smoke-free, healthier you today!",
-            style: theme.textTheme.bodyMedium,
+            style: theme.textTheme.bodySmall,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: screenHeight * 0.06),
@@ -103,7 +106,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 curve: Curves.easeInOut,
               );
             },
-            child: const Text("Get Started"),
+            child:  Text("Get Started",
+            style: TextStyle(
+              color: Pallete.authButton
+            ),),
           ),
         ],
       ),
@@ -116,13 +122,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Container(
       padding: EdgeInsets.symmetric(
           horizontal: screenWidth * 0.06, vertical: screenHeight * 0.1),
-      color: theme.scaffoldBackgroundColor,
+      color: Pallete.backgroundColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "Ditching tobacco is a easy journey",
-            style: theme.textTheme.headlineSmall?.copyWith(fontSize: 28),
+            style: theme.textTheme.titleLarge,
           ),
           SizedBox(height: screenHeight * 0.03),
           _buildInstructionItem(
@@ -158,7 +164,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 },
                 child: Text(
                   "Back",
-                  style: TextStyle(color: theme.colorScheme.primary),
+                  style: TextStyle(
+                      color: Pallete.authButton
+                  ),
                 ),
               ),
               ElevatedButton(
@@ -168,7 +176,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     curve: Curves.easeInOut,
                   );
                 },
-                child: const Text("Next"),
+                child:  Text("Next",
+                  style: TextStyle(
+                    color: Pallete.authButton
+                ),),
               ),
             ],
           ),
@@ -183,19 +194,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Container(
       padding: EdgeInsets.symmetric(
           horizontal: screenWidth * 0.06, vertical: screenHeight * 0.1),
-      color: theme.scaffoldBackgroundColor,
+      color: Pallete.backgroundColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             "Take A Pledge With Me",
-            style: theme.textTheme.headlineSmall?.copyWith(fontSize: 28),
+            style: theme.textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: screenHeight * 0.03),
           Text(
             "I pledge to quit smoking and live a healthier, smoke-free life. With determination, I embrace a fresh start for better health and vitality.",
-            style: theme.textTheme.bodyLarge,
+            style: theme.textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: screenHeight * 0.06),
@@ -207,7 +218,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(
                   horizontal: screenWidth * 0.1, vertical: 15),
-              backgroundColor: theme.colorScheme.primary,
+              backgroundColor: Pallete.authButton,
               foregroundColor: Colors.white,
             ),
             child: const Text("I Pledge to Quit"),
@@ -224,7 +235,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.check_circle, color: theme.colorScheme.primary, size: 24),
+          Icon(Icons.check_circle, color:Pallete.authButton, size: 24),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -232,13 +243,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               children: [
                 Text(
                   title,
-                  style: theme.textTheme.bodyLarge
-                      ?.copyWith(fontWeight: FontWeight.bold),
+                  style: theme.textTheme.titleMedium
                 ),
                 const SizedBox(height: 4),
                 Text(
                   description,
-                  style: theme.textTheme.bodyMedium,
+                  style: theme.textTheme.bodySmall,
                 ),
               ],
             ),
