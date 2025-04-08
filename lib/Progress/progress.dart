@@ -257,7 +257,7 @@ class _ProgressState extends State<Progress> {
             dotData: FlDotData(show: true),
             belowBarData: BarAreaData(
               show: true,
-              color: Pallete.authButton.withOpacity(0.3),
+              color: Pallete.authButton,
             ),
           ),
         ],
@@ -425,14 +425,6 @@ class _ProgressState extends State<Progress> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

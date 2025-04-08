@@ -1,5 +1,4 @@
 import 'package:airbound/Home/home.dart';
-import 'package:airbound/Progress/progress.dart';
 import 'package:airbound/Theme/color_pallet.dart';
 import 'package:flutter/material.dart';
 

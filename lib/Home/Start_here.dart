@@ -1,7 +1,6 @@
 import 'package:airbound/Progress/progress.dart';
 import 'package:flutter/material.dart';
-
-import '../Theme/color_pallet.dart' show Pallete;
+import '../Theme/color_pallet.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});

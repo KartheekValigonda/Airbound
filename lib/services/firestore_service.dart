@@ -28,31 +28,6 @@ class FirestoreService {
     }
   }
 
-  // Initialize daily cigarette data
-  Future<void> _initializeDailyCigaretteData(String userId) async {
-    try {
-      final today = DateTime.now();
-      final dateKey = '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
-      print('Initializing daily cigarette data for date: $dateKey');
-      
-      final docRef = _firestore
-          .collection('user')
-          .doc(userId)
-          .collection('total_cigarette_smoked')
-          .doc(dateKey);
-      
-      await docRef.set({
-        'count': 0,
-        'date': Timestamp.fromDate(today),
-        'lastUpdated': FieldValue.serverTimestamp(),
-      });
-      print('Daily cigarette data initialized successfully');
-    } catch (e) {
-      print('Error initializing daily cigarette data: $e');
-      rethrow;
-    }
-  }
-
   // Get today's cigarette count
   Future<int> getTodayCigaretteCount() async {
     try {

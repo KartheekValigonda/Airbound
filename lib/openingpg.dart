@@ -101,14 +101,6 @@ class _OpeningPgState extends State<OpeningPg> {
                       fit: BoxFit.cover,
                     ),
                     borderRadius: BorderRadius.circular(26),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
                   ),
                 ),
               ),

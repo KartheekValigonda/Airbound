@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import '../Theme/color_pallet.dart';
 import '../controller/auth_controller.dart';
 import '../services/firestore_service.dart';
-import 'dart:math' as math;
 
 class Signup2 extends StatefulWidget {
   const Signup2({super.key});

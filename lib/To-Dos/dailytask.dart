@@ -95,7 +95,6 @@ class _DailytaskState extends State<Dailytask> {
   // Task Item Widget
   Widget taskItem(bool isChecked, String title, IconData icon, Color iconColor,
       {List<String>? details}) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
 

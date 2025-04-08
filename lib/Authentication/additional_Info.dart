@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:airbound/Home/home.dart';
 import 'package:airbound/Theme/color_pallet.dart';
 import 'package:airbound/common%20widgets/commontextfield.dart';
@@ -42,7 +41,6 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
         );
       }
     } catch (e) {
-      print('Error saving additional info: $e');
       Get.snackbar(
         'Error',
         'Failed to save information. Please try again.',
@@ -105,7 +103,7 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
+                            color: Colors.grey,
                             spreadRadius: 2,
                             blurRadius: 5,
                             offset: const Offset(0, 3),

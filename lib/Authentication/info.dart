@@ -86,7 +86,6 @@ class _OnboardingScreenState extends State<Info> {
                   itemCount: _pages.length,
                   itemBuilder: (context, index) {
                     final page = _pages[index];
-                    final isLastPage = index == _pages.length - 1;
 
                     return Padding(
                       padding: EdgeInsets.symmetric(

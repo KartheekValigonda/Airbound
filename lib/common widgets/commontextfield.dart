@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../Theme/color_pallet.dart';
 
 Widget commonTextfield({

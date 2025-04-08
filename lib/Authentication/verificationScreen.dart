@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:airbound/Authentication/additional_Info.dart';
-import 'package:airbound/Home/home.dart';
 import 'package:airbound/Theme/color_pallet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

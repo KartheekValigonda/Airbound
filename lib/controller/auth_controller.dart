@@ -5,9 +5,6 @@ import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter/material.dart';
 import '../services/firestore_service.dart';
-import 'dart:typed_data';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 
 class AuthController extends GetxController {
   final _firestoreService = FirestoreService();

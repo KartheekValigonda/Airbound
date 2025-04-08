@@ -4,12 +4,6 @@ class AppTheme {
   static ThemeData appTheme(BuildContext context) {
 
     return ThemeData(
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF006A67),
-        titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w500,color: Colors.white),
-        elevation: 2.0,
-        centerTitle: true
-      ),
       useMaterial3: true,
       textTheme: const TextTheme(
         titleLarge: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color(0xFF4e6655)),

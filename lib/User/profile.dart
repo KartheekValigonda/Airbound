@@ -121,7 +121,6 @@ class _ProfileState extends State<Profile> {
           ClipPath(
             child: Container(
               height: screenHeight*0.35,
-              child: Center(child: Text("")),
               decoration: BoxDecoration(
                   gradient: const LinearGradient(colors: [Pallete.gradient1,Pallete.gradient2]),
                   borderRadius: BorderRadius.only(
