@@ -1,3 +1,7 @@
+import 'package:airbound/Authentication/additional_info.dart';
+import 'package:airbound/Authentication/loginpage.dart';
+import 'package:airbound/Authentication/verificationScreen.dart';
+import 'package:airbound/Home/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,6 +31,20 @@ class AuthController extends GetxController {
     try {
       userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passController.text);
+          
+      if (userCredential.user != null) {
+        // Check if user has completed additional info
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .get();
+            
+        if (userDoc.exists && userDoc.data()?['additionalInfoCompleted'] == true) {
+          Get.offAll(() => const Home());
+        } else {
+          Get.offAll(() => const AdditionalInfo());
+        }
+      }
     } on FirebaseAuthException catch (e) {
       Get.snackbar("Login Error", e.message ?? "Something went wrong",
           backgroundColor: Colors.black45, colorText: Colors.white);
@@ -35,28 +53,15 @@ class AuthController extends GetxController {
     return userCredential;
   }
 
-  //signup method
-  Future<UserCredential?> signupMethod({name, email, password, context}) async {
-    UserCredential? userCredential;
-
-    try {
-      userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email, password: password);
-      await storeUserData(name: name, email: email, password: password);
-    } on FirebaseAuthException catch (e) {
-      VxToast.show(context, msg: e.toString());
-    }
-    return userCredential;
-  }
-
   //storing data
-  Future<void> storeUserData({name, email, password}) async {
+  Future<void> storeUserData({name, email}) async {
     DocumentReference store = FirebaseFirestore.instance.collection("users")
         .doc(FirebaseAuth.instance.currentUser!.uid);
     await store.set({
       'name': name,
       'email': email,
-      'password': password,
+      'additionalInfoCompleted': false,
+      'createdAt': FieldValue.serverTimestamp(),
     });
   }
 
@@ -64,8 +69,19 @@ class AuthController extends GetxController {
   Future<void> sendEmailVerification({context}) async{
     try {
       await FirebaseAuth.instance.currentUser?.sendEmailVerification();
+      Get.snackbar(
+        'Success',
+        'Verification email sent. Please check your inbox.',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
     } on FirebaseAuthException catch (e) {
-      VxToast.show(context, msg: e.toString());
+      Get.snackbar(
+        'Error',
+        e.message ?? 'Failed to send verification email',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 
@@ -91,11 +107,17 @@ class AuthController extends GetxController {
         await userCredential.user!.updateDisplayName(name);
 
         // Create user document in Firestore
-        await _firestoreService.createUserDocument(
-          uid: uid,
-          name: name,
-          email: email,
-        );
+        await FirebaseFirestore.instance.collection('users').doc(uid).set({
+          'name': name,
+          'email': email,
+          'createdAt': FieldValue.serverTimestamp(),
+          'lastUpdated': FieldValue.serverTimestamp(),
+          'cigarettesPerDay': 0,
+          'costPerCigarette': 0.0,
+          'totalCigarettesSmoked': {},
+          'profilePhotosUrl': null,
+          'additionalInfoCompleted': false,
+        });
 
         // Send email verification
         await userCredential.user!.sendEmailVerification();
@@ -159,20 +181,12 @@ class AuthController extends GetxController {
 
   Future<void> signOut() async {
     try {
-      // Sign out from Firebase
-      await firebase_auth.FirebaseAuth.instance.signOut();
-
-      Get.snackbar(
-        'Success',
-        'Logged out successfully',
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
+      await FirebaseAuth.instance.signOut();
+      Get.offAll(() => const LoginPage());
     } catch (e) {
-      print('Error during signout: $e');
       Get.snackbar(
         'Error',
-        'Failed to logout. Please try again.',
+        'Failed to logout: ${e.toString()}',
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
@@ -181,11 +195,7 @@ class AuthController extends GetxController {
 
   Future<void> resetPassword(String email) async {
     try {
-      // Send reset email from Firebase
-      await firebase_auth.FirebaseAuth.instance.sendPasswordResetEmail(
-        email: email,
-      );
-
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       Get.snackbar(
         'Success',
         'Password reset email sent',
@@ -193,14 +203,12 @@ class AuthController extends GetxController {
         colorText: Colors.white,
       );
     } catch (e) {
-      print('Error during password reset: $e');
       Get.snackbar(
         'Error',
-        'Failed to send reset email',
+        'Failed to send reset email: ${e.toString()}',
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
-      rethrow;
     }
   }
 }

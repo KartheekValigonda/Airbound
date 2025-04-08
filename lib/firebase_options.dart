@@ -42,17 +42,17 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBmPI2gLl_h6xoC2wTwhg3u76u27fOj-bI',
-    appId: '1:267982853281:web:1ba8e78df1957175d1cce0',
+    appId: '1:267982853281:web:8c827880ccbf91dad1cce0',
     messagingSenderId: '267982853281',
     projectId: 'airbound-e1a16',
     authDomain: 'airbound-e1a16.firebaseapp.com',
     storageBucket: 'airbound-e1a16.firebasestorage.app',
-    measurementId: 'G-HHSXG11H79',
+    measurementId: 'G-0MN93H6XNG',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCfMj_y_YOrtUxRTMpE5YtJTD14vxsKUDI',
-    appId: '1:267982853281:android:382705d4796dcd71d1cce0',
+    appId: '1:267982853281:android:b8b8c7dac5287927d1cce0',
     messagingSenderId: '267982853281',
     projectId: 'airbound-e1a16',
     storageBucket: 'airbound-e1a16.firebasestorage.app',
@@ -60,7 +60,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC4i5WQsb8_oVlZg6rriMnJFdHOiYcVCnY',
-    appId: '1:267982853281:ios:8c9371a44c106aedd1cce0',
+    appId: '1:267982853281:ios:2b4ef1e358ac4053d1cce0',
     messagingSenderId: '267982853281',
     projectId: 'airbound-e1a16',
     storageBucket: 'airbound-e1a16.firebasestorage.app',
@@ -69,7 +69,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyC4i5WQsb8_oVlZg6rriMnJFdHOiYcVCnY',
-    appId: '1:267982853281:ios:8c9371a44c106aedd1cce0',
+    appId: '1:267982853281:ios:2b4ef1e358ac4053d1cce0',
     messagingSenderId: '267982853281',
     projectId: 'airbound-e1a16',
     storageBucket: 'airbound-e1a16.firebasestorage.app',
@@ -78,11 +78,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyBmPI2gLl_h6xoC2wTwhg3u76u27fOj-bI',
-    appId: '1:267982853281:web:888d29cdc8c7617fd1cce0',
+    appId: '1:267982853281:web:21ca0a4ac326d938d1cce0',
     messagingSenderId: '267982853281',
     projectId: 'airbound-e1a16',
     authDomain: 'airbound-e1a16.firebaseapp.com',
     storageBucket: 'airbound-e1a16.firebasestorage.app',
-    measurementId: 'G-NXVZKW6VM7',
+    measurementId: 'G-CJMJ3DKT1T',
   );
+
 }

@@ -5,6 +5,9 @@ class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  // Get current user ID
+  String? get currentUserId => _auth.currentUser?.uid;
+
   // Create a new user document in Firestore
   Future<void> createUserDocument({
     required String uid,
@@ -21,6 +24,7 @@ class FirestoreService {
         'costPerCigarette': 0.0,
         'totalCigarettesSmoked': {},
         'profilePhotosUrl': null,
+        'additionalInfoCompleted': false,
       });
     } catch (e) {
       print('Error creating user document: $e');
@@ -115,24 +119,17 @@ class FirestoreService {
   // Get user data from Firestore
   Future<Map<String, dynamic>?> getUserData() async {
     try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        print('Getting user data for user ID: ${user.uid}');
-        final doc = await _firestore.collection('users').doc(user.uid).get();
-        if (doc.exists) {
-          print('User data retrieved successfully');
-          return doc.data();
-        } else {
-          print('No user document found');
-          return null;
-        }
-      } else {
-        print('No authenticated user found');
-        return null;
+      final userId = currentUserId;
+      if (userId == null) return null;
+
+      final docSnapshot = await _firestore.collection('users').doc(userId).get();
+      if (docSnapshot.exists) {
+        return docSnapshot.data();
       }
+      return null;
     } catch (e) {
       print('Error getting user data: $e');
-      rethrow;
+      return null;
     }
   }
 
@@ -279,6 +276,38 @@ class FirestoreService {
       return {'cigarettesPerDay': 0.0, 'costPerCigarette': 0.0};
     } catch (e) {
       print('Error fetching user additional info: $e');
+      rethrow;
+    }
+  }
+
+  // Delete user data
+  Future<void> deleteUserData() async {
+    try {
+      final userId = currentUserId;
+      if (userId == null) {
+        throw Exception('No authenticated user found');
+      }
+
+      // Delete user document
+      await _firestore.collection('users').doc(userId).delete();
+      
+      // Delete any other user-related data
+      // For example, if you have a collection for user progress
+      final progressSnapshot = await _firestore
+          .collection('progress')
+          .where('userId', isEqualTo: userId)
+          .get();
+      
+      // Delete all progress documents
+      for (var doc in progressSnapshot.docs) {
+        await doc.reference.delete();
+      }
+      
+      // Add more collections to delete if needed
+      
+      print('User data deleted successfully');
+    } catch (e) {
+      print('Error deleting user data: $e');
       rethrow;
     }
   }

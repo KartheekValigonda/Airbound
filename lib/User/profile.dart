@@ -108,6 +108,90 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+  Future<void> _handleDeleteAccount() async {
+    try {
+      // Show confirmation dialog
+      final bool? confirm = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Delete Account'),
+            content: const Text(
+              'Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently deleted.',
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () => Navigator.of(context).pop(false),
+              ),
+              TextButton(
+                child: const Text(
+                  'Delete',
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () => Navigator.of(context).pop(true),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (confirm != true) {
+        return;
+      }
+
+      // Show loading indicator
+      Get.dialog(
+        const Center(
+          child: CircularProgressIndicator(),
+        ),
+        barrierDismissible: false,
+      );
+
+      // Get current user
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        Get.back(); // Close loading dialog
+        Get.snackbar(
+          'Error',
+          'No user found',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return;
+      }
+
+      // Delete user data from Firestore
+      await _firestoreService.deleteUserData();
+
+      // Delete user account
+      await user.delete();
+
+      // Close loading dialog
+      Get.back();
+
+      // Show success message
+      Get.snackbar(
+        'Success',
+        'Account deleted successfully',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+
+      // Navigate to login page and clear navigation stack
+      Get.offAll(() => LoginPage());
+    } catch (e) {
+      print('Error deleting account: $e');
+      Get.back(); // Close loading dialog
+      Get.snackbar(
+        'Error',
+        'Failed to delete account: ${e.toString()}',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -179,18 +263,7 @@ class _ProfileState extends State<Profile> {
                               (){Navigator.push(context, MaterialPageRoute(builder: (context)=> UpdateProfile()));},
                           context,
                         ),
-                        _buildSettingsOption(
-                          Icons.policy,
-                          "Privacy policy",
-                              (){Navigator.push(context, MaterialPageRoute(builder: (context)=> Placeholder()));},
-                          context,
-                        ),
-                        _buildSettingsOption(
-                          Icons.help_outline,
-                          "Help and support",
-                              (){Navigator.push(context, MaterialPageRoute(builder: (context)=> Placeholder()));},
-                          context,
-                        ),
+                        
                         Divider(color: theme.dividerColor),
                         ListTile(
                           leading: const Icon(Icons.logout, color: Pallete.authButton),
@@ -199,6 +272,16 @@ class _ProfileState extends State<Profile> {
                               style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           onTap: _handleLogout,
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.delete_forever, color: Colors.red),
+                          title: Text(
+                            "Delete Account",
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: Colors.red,
+                              ),
+                          ),
+                          onTap: _handleDeleteAccount,
                         ),
                       ],
                     ),

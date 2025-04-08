@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:267982853281:android:382705d4796dcd71d1cce0",
+        "mobilesdk_app_id": "1:267982853281:android:b8b8c7dac5287927d1cce0",
         "android_client_info": {
-          "package_name": "com.example.airbound"
+          "package_name": "com.kv.kick_ash"
         }
       },
       "oauth_client": [],

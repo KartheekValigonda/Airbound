@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
               commonButton(
                 onNavigate: () async {
                   UserCredential? userCredential =
-                      await controller.loginMethod(context: context);
+                  await controller.loginMethod(context: context);
                   if (userCredential != null) {
                     Get.offAll(() => const Home());
                   }
@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                   color: Pallete.authButton,
                 ),
               ),
-              Text(
+              /*Text(
                 "OR",
                 style: Theme.of(context).textTheme.bodySmall,
               ),
@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: verticalPadding * 0.07,
                 clr: Colors.white,
                 txtclr: Colors.black,
-              ),
+              ),*/
               SizedBox(height: verticalPadding * 0.04),
               GestureDetector(
                 onTap: () {

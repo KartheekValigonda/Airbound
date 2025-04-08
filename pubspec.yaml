@@ -30,25 +30,25 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
+  cupertino_icons:
   smooth_page_indicator:
-  firebase_core: ^2.24.2
+  firebase_core:
   velocity_x:
-  get: ^4.6.6
-  firebase_auth: ^4.15.3
-  firebase_storage: ^11.5.6
-  cloud_firestore: ^4.13.6
+  get:
+  firebase_auth:
+  firebase_storage:
+  cloud_firestore:
   firebase_app_check:
   flutter_custom_clippers:
-  image_picker: ^1.0.7
-  shared_preferences: ^2.2.2
+  image_picker:
+  shared_preferences:
   intl:
   fl_chart:
-  path_provider: ^2.1.2
-  curved_navigation_bar: ^1.0.6
+  path_provider:
+  curved_navigation_bar:
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.10.0
+  flutter_launcher_icons:
   flutter_test:
     sdk: flutter
 

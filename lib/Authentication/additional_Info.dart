@@ -93,8 +93,8 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
                     ),
                     SizedBox(height: screenHeight * 0.02),
                     Text(
-                      "This information will help us track your progress better",
-                      style: theme.textTheme.bodyMedium),
+                        "This information will help us track your progress better",
+                        style: theme.textTheme.bodyMedium),
                     SizedBox(height: screenHeight * 0.05),
                     Container(
                       padding: EdgeInsets.all(screenWidth * 0.04),
@@ -162,14 +162,14 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
                                 ),
                               ),
                               child: Obx(() => _isLoading.value
-                                ? const CircularProgressIndicator()
-                                : Text(
-                                  "Let's dive in!",
-                                  style: TextStyle(
-                                    fontSize: screenWidth * 0.04,
-                                    color: Colors.white,
-                                  ),
+                                  ? const CircularProgressIndicator()
+                                  : Text(
+                                "Let's dive in!",
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.04,
+                                  color: Colors.white,
                                 ),
+                              ),
                               ),
                             ),
                           ),

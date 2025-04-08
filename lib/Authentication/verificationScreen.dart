@@ -57,17 +57,17 @@ class _VerificationScreenState extends State<VerificationScreen> {
       try {
         await user?.reload();
         user = _auth.currentUser;
-        
+
         if (user?.emailVerified ?? false) {
           timer.cancel();
           if (mounted) {
             setState(() {
               _isLoading = true;
             });
-            
+
             // Add a small delay to show the loading indicator
             await Future.delayed(const Duration(milliseconds: 500));
-            
+
             if (mounted) {
               Navigator.pushReplacement(
                 context,

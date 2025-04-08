@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
         items: const [
           Icon(Icons.home, color: Pallete.backgroundColor),
           Icon(Icons.show_chart, color: Pallete.backgroundColor),
-          Icon(Icons.monitor_heart_outlined, color:Pallete.backgroundColor),
+          Icon(Icons.monitor_heart_outlined, color: Pallete.backgroundColor),
           Icon(Icons.person, color: Pallete.backgroundColor),
         ],
       ),

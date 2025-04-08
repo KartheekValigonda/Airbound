@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Theme/color_pallet.dart';
 import '../controller/auth_controller.dart';
-import '../services/firestore_service.dart';
 
 class Signup2 extends StatefulWidget {
   const Signup2({super.key});
@@ -17,7 +16,6 @@ class Signup2 extends StatefulWidget {
 
 class _Signup2State extends State<Signup2> {
   final AuthController controller = Get.put(AuthController());
-  final FirestoreService _firestoreService = FirestoreService();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -27,8 +25,13 @@ class _Signup2State extends State<Signup2> {
 
   final RxBool isPasswordVisible = false.obs;
 
-  // **Firebase Instance**
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  @override
+  void dispose() {
+    emailController.dispose();
+    passController.dispose();
+    nameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +77,7 @@ class _Signup2State extends State<Signup2> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              const BorderSide(color: Pallete.authButton, width: 1.0),
+                          const BorderSide(color: Pallete.authButton, width: 1.0),
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
@@ -102,7 +105,7 @@ class _Signup2State extends State<Signup2> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              const BorderSide(color: Pallete.authButton, width: 1.0),
+                          const BorderSide(color: Pallete.authButton, width: 1.0),
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
@@ -118,40 +121,40 @@ class _Signup2State extends State<Signup2> {
 
                     /// **Password Field**
                     Obx(() => TextFormField(
-                          controller: passController,
+                      controller: passController,
                       style: Theme.of(context).textTheme.bodySmall,
                       obscureText: !isPasswordVisible.value,
-                          decoration: InputDecoration(
-                            hintText: "Password",
-                            hintStyle: Theme.of(context).textTheme.bodySmall,
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: Pallete.authButton),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: Pallete.authButton, width: 1.0),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(isPasswordVisible.value
-                                  ? Icons.visibility
-                                  : Icons.visibility_off),
-                              onPressed: () => isPasswordVisible.toggle(),
-                              color: Pallete.authButton,
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty)
-                              return "Please enter a password";
-                            if (value.length < 6)
-                              return "Password must be at least 6 characters";
-                            return null;
-                          },
-                        )),
+                      decoration: InputDecoration(
+                        hintText: "Password",
+                        hintStyle: Theme.of(context).textTheme.bodySmall,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          const BorderSide(color: Pallete.authButton),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                          const BorderSide(color: Pallete.authButton, width: 1.0),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(isPasswordVisible.value
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                          onPressed: () => isPasswordVisible.toggle(),
+                          color: Pallete.authButton,
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return "Please enter a password";
+                        if (value.length < 6)
+                          return "Password must be at least 6 characters";
+                        return null;
+                      },
+                    )),
                     SizedBox(height: verticalPadding * 0.05),
 
                     /// **Sign Up Button**
@@ -170,70 +173,27 @@ class _Signup2State extends State<Signup2> {
                               },
                             );
 
-                            // Create user account
-                            final UserCredential userCredential =
-                                await _auth.createUserWithEmailAndPassword(
+                            // Use the existing signUp method from AuthController
+                            await controller.signUp(
                               email: emailController.text.trim(),
                               password: passController.text.trim(),
+                              name: nameController.text.trim(),
                             );
 
-                            if (userCredential.user != null) {
-                              // Store user data in Firestore
-                              await _firestoreService.createUserDocument(
-                                uid: userCredential.user!.uid,
-                                name: nameController.text.trim(),
-                                email: emailController.text.trim(),
-                              );
-
-                              // Close loading indicator
-                              Navigator.pop(context);
-
-                              // Show success message
-                              Get.snackbar(
-                                "Success",
-                                "Account created successfully!",
-                                backgroundColor: Colors.green,
-                                colorText: Colors.white,
-                              );
-
-                              // Navigate to verification screen
-                              if (context.mounted) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => VerificationScreen(),
-                                  ),
-                                );
-                              }
-                            }
-                          } on FirebaseAuthException catch (e) {
                             // Close loading indicator
                             if (context.mounted) {
                               Navigator.pop(context);
                             }
 
-                            String errorMessage = "Something went wrong";
-                            switch (e.code) {
-                              case 'weak-password':
-                                errorMessage = "The password provided is too weak.";
-                                break;
-                              case 'email-already-in-use':
-                                errorMessage = "An account already exists for this email.";
-                                break;
-                              case 'invalid-email':
-                                errorMessage = "The email address is invalid.";
-                                break;
-                              default:
-                                errorMessage = e.message ?? "Something went wrong";
+                            // Navigate to verification screen
+                            if (context.mounted) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const VerificationScreen(),
+                                ),
+                              );
                             }
-
-                            // Show error message
-                            Get.snackbar(
-                              "Signup Error",
-                              errorMessage,
-                              backgroundColor: Colors.red,
-                              colorText: Colors.white,
-                            );
                           } catch (e) {
                             // Close loading indicator
                             if (context.mounted) {
@@ -257,7 +217,7 @@ class _Signup2State extends State<Signup2> {
                       txtclr: Colors.white,
                     ),
                     SizedBox(height: verticalPadding * 0.04),
-                    Text("OR", style: Theme.of(context).textTheme.bodySmall),
+                    /*Text("OR", style: Theme.of(context).textTheme.bodySmall),
                     SizedBox(height: verticalPadding * 0.05),
                     commonButton(
                       onNavigate: () {},
@@ -266,7 +226,7 @@ class _Signup2State extends State<Signup2> {
                       height: verticalPadding * 0.07,
                       clr: Colors.white,
                       txtclr: Colors.black,
-                    ),
+                    ),*/
                     SizedBox(height: verticalPadding * 0.03),
                     InkWell(
                       child: Text("Already have an account! LogIn"),

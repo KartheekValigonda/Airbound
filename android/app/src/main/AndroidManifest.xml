@@ -1,11 +1,13 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.kv.kick_ash"
+    >
     <!-- Add these permissions for gallery access -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     
     <application
-        android:label="airbound"
+        android:label="Kick Ash"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
