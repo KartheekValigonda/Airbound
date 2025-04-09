@@ -66,23 +66,25 @@ class _UpdateProfileState extends State<UpdateProfile> {
       
       print('Found ${snapshot.docs.length} profile pictures');
       
-      final List<String> urls = snapshot.docs.map((doc) {
+      final List<String> urls = [];
+      
+      for (var doc in snapshot.docs) {
         final data = doc.data();
         final url = data['url'];
         
         if (url == null) {
           print('Warning: Document ${doc.id} has no url field');
-          return '';
+          continue;
         }
         
         if (url is! String) {
           print('Warning: Document ${doc.id} has invalid url type: ${url.runtimeType}');
-          return '';
+          continue;
         }
         
         print('Profile picture URL: $url');
-        return url;
-      }).where((url) => url.isNotEmpty).toList();
+        urls.add(url);
+      }
       
       if (urls.isEmpty) {
         print('No valid profile picture URLs found');
@@ -119,6 +121,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
       return;
     }
 
+    print('Showing profile pic selector with ${_profilePics.length} images');
+    
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -137,69 +141,88 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.refresh),
+                      onPressed: () async {
+                        await _loadProfilePics();
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                          _showProfilePicSelector();
+                        }
+                      },
+                      tooltip: 'Refresh profile pictures',
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
                 ),
               ],
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: Obx(() => GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: _profilePics.length,
-                itemBuilder: (context, index) {
-                  final imageUrl = _profilePics[index];
-                  return GestureDetector(
-                    onTap: () {
-                      _selectedProfilePic.value = imageUrl;
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: _selectedProfilePic.value == imageUrl
-                              ? Colors.blue
-                              : Colors.grey,
-                          width: 2,
+              child: Obx(() {
+                print('Building grid with ${_profilePics.length} images');
+                return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemCount: _profilePics.length,
+                  itemBuilder: (context, index) {
+                    final imageUrl = _profilePics[index];
+                    print('Building grid item $index with URL: $imageUrl');
+                    return GestureDetector(
+                      onTap: () {
+                        _selectedProfilePic.value = imageUrl;
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: _selectedProfilePic.value == imageUrl
+                                ? Colors.blue
+                                : Colors.grey,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(6),
-                        child: Image.network(
-                          imageUrl,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            print('Error loading image: $error');
-                            return const Center(
-                              child: Icon(
-                                Icons.error_outline,
-                                color: Colors.red,
-                              ),
-                            );
-                          },
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: Image.network(
+                            imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              print('Error loading image: $error');
+                              return const Center(
+                                child: Icon(
+                                  Icons.error_outline,
+                                  color: Colors.red,
+                                ),
+                              );
+                            },
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              )),
+                    );
+                  },
+                );
+              }),
             ),
           ],
         ),
